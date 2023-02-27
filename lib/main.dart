@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() => runApp(MaterialApp(
@@ -46,6 +47,8 @@ class MyApp extends StatelessWidget {
 }
 
 
+
+
 class MapSample extends StatefulWidget {
   const MapSample({Key? key}) : super(key: key);
 
@@ -68,11 +71,29 @@ class MapSampleState extends State<MapSample> {
       tilt: 59.440717697143555,
       zoom: 19.151926040649414);
 
+  static final Marker _KGooglePlexMarker = Marker(
+      markerId: MarkerId("_kGooglePlexMarker"),
+      infoWindow: InfoWindow(title: "Marker"),
+      icon: BitmapDescriptor.defaultMarker,
+      position: LatLng(37.42796133580664, -122.085749655962),
+  );
+
+  static  Marker _kSecondMarker = Marker(
+    markerId: MarkerId("_kSecondMarker"),
+    infoWindow: InfoWindow(title: "Second"),
+    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+    position: LatLng(37.43296265331129, -122.08832357078792),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GoogleMap(
-        mapType: MapType.hybrid,
+        mapType: MapType.normal,
+        markers: {
+          _kSecondMarker,
+          _KGooglePlexMarker
+        },
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
@@ -114,8 +135,26 @@ class MapSampleState extends State<MapSample> {
 
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    LatLng userLocation = LatLng(position.latitude, position.longitude);
+    Marker updatedMarker = _kSecondMarker.copyWith(
+      positionParam: userLocation,
+    );
+    setState(() {
+      _kSecondMarker = updatedMarker;
+    });
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: userLocation,
+          zoom: 14.0,
+        ),
+      ),
+    );
   }
+
 }
 
 
