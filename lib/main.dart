@@ -1,6 +1,8 @@
+import 'package:carparkapp/pages/chatPage.dart';
+import 'package:carparkapp/pages/favPage.dart';
 import 'package:flutter/material.dart';
 
-import './searchPage.dart';
+import 'pages/searchPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -37,14 +39,33 @@ class HomePage extends StatelessWidget {
         title: Text('Carparking App'),
       ),
       body: Center(
-          child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const SearchPage();
-          }));
-        },
-        child: Text("Search"),
-      )),
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const SearchPage();
+              }));
+            },
+            child: Text("Search"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const ChatPage();
+              }));
+            },
+            child: Text("Live Chat"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const FavPage();
+              }));
+            },
+            child: Text("Favourites"),
+          ),
+        ]),
+      ),
     );
   }
 }

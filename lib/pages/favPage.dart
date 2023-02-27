@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import './carparks.dart';
+import '../carparks.dart';
 import 'filterPage.dart';
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+class FavPage extends StatefulWidget {
+  const FavPage({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  State<FavPage> createState() => _FavPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _FavPageState extends State<FavPage> {
   final searchController = TextEditingController();
 
   //list of carparks, imported from carparks.dart
@@ -50,9 +50,21 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         elevation: 0.0,
         centerTitle: true,
-        title: Text(
-          "Search",
-          style: TextStyle(color: Colors.black),
+        title: Row(
+          children: [
+            SizedBox(width: 45),
+            Text(
+              "Your Favourites",
+              style: TextStyle(color: Colors.black),
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Icon(
+              Icons.favorite,
+              color: Colors.red,
+            )
+          ],
         ),
         backgroundColor: Theme.of(context).primaryColor,
       ),
