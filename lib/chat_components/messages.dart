@@ -1,4 +1,4 @@
-import 'package:carparkapp/chat_components/messageBubble.dart';
+import './messageBubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';

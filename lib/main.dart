@@ -1,5 +1,5 @@
-import 'package:carparkapp/pages/chatPage.dart';
-import 'package:carparkapp/pages/favPage.dart';
+import '../pages/chatPage.dart';
+import '../pages/favPage.dart';
 import 'package:flutter/material.dart';
 import '../pages/login_page.dart';
 import '../pages/booking_page.dart';
@@ -39,7 +39,6 @@ class _MyAppState extends State<MyApp> {
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
-      home: LoginPage(),
     );
   }
 }

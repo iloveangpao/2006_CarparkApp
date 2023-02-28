@@ -5,6 +5,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator_platform_interface/src/enums/location_permission.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:sc_2006/pages/booking_page.dart';
+import 'package:sc_2006/pages/chatPage.dart';
+import 'package:sc_2006/pages/favPage.dart';
+import 'package:sc_2006/pages/searchPage.dart';
 
 // void main() => runApp(MaterialApp(
 //       home: MapSample(),
@@ -48,6 +52,15 @@ class MapPage extends StatefulWidget {
 }
 
 class MapPageState extends State<MapPage> {
+  int _selectedIndex = 0;
+  final screens = [SearchPage(), BookingPage(), FavPage(), ChatPage()];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
@@ -113,19 +126,41 @@ class MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GoogleMap(
-        mapType: MapType.normal,
-        markers: {_woodlandsmrtmarker, _marsilingmarker},
-        polylines: {
-          Polyline(
-            polylineId: PolylineId("route"),
-            points: polyLineCoordinates,
-          )
-        },
-        initialCameraPosition: _marsiling,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
+      body: Column(
+        children: [
+          // ElevatedButton(
+          //     onPressed: () {
+          //       Navigator.of(context).push(
+          //           MaterialPageRoute(builder: (context) => BookingPage()));
+          //     },
+          //     child: Text("Booking")),
+          // ElevatedButton(
+          //     onPressed: () {
+          //       Navigator.of(context).push(
+          //           MaterialPageRoute(builder: (context) => SearchPage()));
+          //     },
+          //     child: Text("Search")),
+          // ElevatedButton(
+          //     onPressed: () {
+          //       Navigator.of(context)
+          //           .push(MaterialPageRoute(builder: (context) => ChatPage()));
+          //     },
+          //     child: Text("Chat")),
+          GoogleMap(
+            mapType: MapType.normal,
+            markers: {_woodlandsmrtmarker, _marsilingmarker},
+            polylines: {
+              Polyline(
+                polylineId: PolylineId("route"),
+                points: polyLineCoordinates,
+              )
+            },
+            initialCameraPosition: _marsiling,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _goToCurrentLoc,
@@ -155,6 +190,11 @@ class MapPageState extends State<MapPage> {
               icon: Icon(Icons.phone_in_talk, color: Colors.white),
               label: 'Live Chat'),
         ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.black,
+        iconSize: 40,
+        onTap: _onItemTapped,
+        elevation: 5,
       ),
     );
   }

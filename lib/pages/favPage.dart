@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../carparks.dart';
+import '../classes/carparks.dart';
 import 'filterPage.dart';
 
 class FavPage extends StatefulWidget {

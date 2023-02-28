@@ -1,5 +1,5 @@
-import 'package:carparkapp/chat_components/messages.dart';
-import 'package:carparkapp/chat_components/new_message.dart';
+import '../chat_components/messages.dart';
+import '../chat_components/new_message.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatelessWidget {
