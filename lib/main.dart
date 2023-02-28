@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sc_2006/pages/login_page.dart';
+import 'package:sc_2006/pages/booking_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,7 +21,7 @@ int currentIndex =0;
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: BookingPage(),
     );
   }
 }

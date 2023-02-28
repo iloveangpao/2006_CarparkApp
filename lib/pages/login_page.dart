@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sc_2006/components/my_button.dart';
 import 'package:sc_2006/components/my_textfield.dart';
 import 'package:sc_2006/components/square_tile.dart';
+import 'register_page.dart';
 
     class LoginPage extends StatelessWidget {
        LoginPage({Key? key}) : super(key: key);
@@ -64,8 +64,18 @@ import 'package:sc_2006/components/square_tile.dart';
                   ),
                   const SizedBox(height: 25),
                     //sign in button
-                  MyButton(
-                    onTap: signUserIn,
+                  GestureDetector(
+                    child: Container(
+                        padding: const EdgeInsets.all(25),
+                        margin: const EdgeInsets.symmetric(horizontal: 25),
+                        decoration: BoxDecoration(color: Colors.black,
+                          borderRadius: BorderRadius.circular(8),),
+                        child: Center(child: Text(
+                          "Sign Up",
+                          style: TextStyle(color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),))
+                    ),
                   ),
                     const SizedBox(height:50),
                     //or continue with
@@ -112,8 +122,16 @@ import 'package:sc_2006/components/square_tile.dart';
                     children: [
                       const Text("Not a member?"),
                       const SizedBox(width:4),
-                      const Text("Register now",
-                      style:  TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),)
+                      new GestureDetector(
+                        onTap: (){
+                          int index;
+                          String name;
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>RegisterPage())
+                          );
+                        },
+                        child: const Text("Register now",
+                        style:  TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
+                      )
                     ],
                   )
                   ],),
@@ -123,4 +141,7 @@ import 'package:sc_2006/components/square_tile.dart';
         );
       }
     }
+    
+
+    
     
