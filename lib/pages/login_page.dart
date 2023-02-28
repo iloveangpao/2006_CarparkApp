@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sc_2006/pages/map_page.dart';
 import '../components/my_textfield.dart';
 import '../components/square_tile.dart';
 import 'register_page.dart';
@@ -65,6 +66,12 @@ class LoginPage extends StatelessWidget {
                   const SizedBox(height: 25),
                   //sign in button
                   GestureDetector(
+                    onTap: () {
+                      int index;
+                      String name;
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => MapPage()));
+                    },
                     child: Container(
                         padding: const EdgeInsets.all(25),
                         margin: const EdgeInsets.symmetric(horizontal: 25),
