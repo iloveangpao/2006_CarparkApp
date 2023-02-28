@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sc_2006/components/my_textfield.dart';
-import 'package:sc_2006/components/square_tile.dart';
+import '../components/my_textfield.dart';
+import '../components/square_tile.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.grey[300],
-        body:SafeArea(
+        body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
               child: Column(
@@ -23,24 +23,24 @@ class RegisterPage extends StatelessWidget {
                 children: [
                   SizedBox(height: 50),
                   //Logo
-                  Image.asset("images/2343894.png",
-                    height:50,),
-                  const SizedBox(height:25),
-                  //Welcome back
-                  Text("Create your account in less then a minute !",
-                    style: TextStyle(
-                        color:Colors.grey[700],
-                        fontSize: 16),
-
+                  Image.asset(
+                    "images/2343894.png",
+                    height: 50,
                   ),
-                  const SizedBox(height:25),
+                  const SizedBox(height: 25),
+                  //Welcome back
+                  Text(
+                    "Create your account in less then a minute !",
+                    style: TextStyle(color: Colors.grey[700], fontSize: 16),
+                  ),
+                  const SizedBox(height: 25),
                   //username textfield
                   MyTextfield(
                     controller: usernameController,
                     hintText: 'Username',
                     obscureText: false,
                   ),
-                  const SizedBox(height:10),
+                  const SizedBox(height: 10),
                   //password textfield
                   MyTextfield(
                     controller: passwordController,
@@ -59,8 +59,7 @@ class RegisterPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                      ],
+                      children: [],
                     ),
                   ),
                   const SizedBox(height: 25),
@@ -69,36 +68,37 @@ class RegisterPage extends StatelessWidget {
                     child: Container(
                         padding: const EdgeInsets.all(25),
                         margin: const EdgeInsets.symmetric(horizontal: 25),
-                        decoration: BoxDecoration(color: Colors.black,
-                          borderRadius: BorderRadius.circular(8),),
-                        child: Center(child: Text(
-                          "Sign in",
-                          style: TextStyle(color: Colors.white,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                            child: Text(
+                          "Sign Up",
+                          style: TextStyle(
+                              color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16),))
-                    ),
+                              fontSize: 16),
+                        ))),
                   ),
-                  const SizedBox(height:50),
+                  const SizedBox(height: 50),
                   //or continue with
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Row(
                       children: [
-                        Expanded(child: Divider(
-                            thickness: 0.5,
-                            color: Colors.grey[400]
-                        ),
-
+                        Expanded(
+                          child:
+                              Divider(thickness: 0.5, color: Colors.grey[400]),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text("Or Continue With",
                               style: TextStyle(color: Colors.grey[700])),
                         ),
-                        Expanded(child: Divider(
-                            thickness: 0.5,
-                            color: Colors.grey[400]
-                        ),
+                        Expanded(
+                          child:
+                              Divider(thickness: 0.5, color: Colors.grey[400]),
                         )
                       ],
                     ),
@@ -111,26 +111,29 @@ class RegisterPage extends StatelessWidget {
                       //Google
                       SquareTile(imagePath: 'images/google-logo-9808.png'),
 
-                      const SizedBox(width:10),
+                      const SizedBox(width: 10),
                       //Apple
                       SquareTile(imagePath: 'images/png-apple-logo-9711.png'),
                     ],
                   ),
-                  const SizedBox(height:50),
+                  const SizedBox(height: 50),
                   //not a member? register now
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text("Already have an account ?"),
-                      const SizedBox(width:4),
-                      const Text("Log in now",
-                        style:  TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),)
+                      const SizedBox(width: 4),
+                      const Text(
+                        "Log in now",
+                        style: TextStyle(
+                            color: Colors.blue, fontWeight: FontWeight.bold),
+                      )
                     ],
                   )
-                ],),
+                ],
+              ),
             ),
           ),
-        )
-    );
+        ));
   }
 }
