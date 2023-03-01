@@ -126,41 +126,19 @@ class MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          // ElevatedButton(
-          //     onPressed: () {
-          //       Navigator.of(context).push(
-          //           MaterialPageRoute(builder: (context) => BookingPage()));
-          //     },
-          //     child: Text("Booking")),
-          // ElevatedButton(
-          //     onPressed: () {
-          //       Navigator.of(context).push(
-          //           MaterialPageRoute(builder: (context) => SearchPage()));
-          //     },
-          //     child: Text("Search")),
-          // ElevatedButton(
-          //     onPressed: () {
-          //       Navigator.of(context)
-          //           .push(MaterialPageRoute(builder: (context) => ChatPage()));
-          //     },
-          //     child: Text("Chat")),
-          GoogleMap(
-            mapType: MapType.normal,
-            markers: {_woodlandsmrtmarker, _marsilingmarker},
-            polylines: {
-              Polyline(
-                polylineId: PolylineId("route"),
-                points: polyLineCoordinates,
-              )
-            },
-            initialCameraPosition: _marsiling,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-          ),
-        ],
+      body: GoogleMap(
+        mapType: MapType.normal,
+        markers: {_woodlandsmrtmarker, _marsilingmarker},
+        polylines: {
+          Polyline(
+            polylineId: PolylineId("route"),
+            points: polyLineCoordinates,
+          )
+        },
+        initialCameraPosition: _marsiling,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _goToCurrentLoc,
@@ -170,32 +148,6 @@ class MapPageState extends State<MapPage> {
           color: Colors.grey,
         ),
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   backgroundColor: Colors.blue[900],
-      //   unselectedItemColor: Colors.white,
-      //   type: BottomNavigationBarType.fixed,
-      //   unselectedLabelStyle:
-      //       const TextStyle(color: Colors.white, fontSize: 14),
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home, color: Colors.white),
-      //       label: 'Search',
-      //     ),
-      //     BottomNavigationBarItem(
-      //         icon: Icon(Icons.search, color: Colors.white), label: 'Bookings'),
-      //     BottomNavigationBarItem(
-      //         icon: Icon(Icons.heart_broken_rounded, color: Colors.white),
-      //         label: 'Favourites'),
-      //     BottomNavigationBarItem(
-      //         icon: Icon(Icons.phone_in_talk, color: Colors.white),
-      //         label: 'Live Chat'),
-      //   ],
-      //   currentIndex: _selectedIndex,
-      //   selectedItemColor: Colors.black,
-      //   iconSize: 40,
-      //   onTap: _onItemTapped,
-      //   elevation: 5,
-      // ),
     );
   }
 
