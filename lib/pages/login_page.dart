@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sc_2006/pages/map_page.dart';
+import './home_page.dart';
+import './map_page.dart';
 import '../components/my_textfield.dart';
 import '../components/square_tile.dart';
 import 'register_page.dart';
@@ -70,7 +71,7 @@ class LoginPage extends StatelessWidget {
                       int index;
                       String name;
                       Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => MapPage()));
+                          MaterialPageRoute(builder: (context) => HomePage()));
                     },
                     child: Container(
                         padding: const EdgeInsets.all(25),

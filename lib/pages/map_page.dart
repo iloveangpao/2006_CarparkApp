@@ -5,10 +5,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator_platform_interface/src/enums/location_permission.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:sc_2006/pages/booking_page.dart';
-import 'package:sc_2006/pages/chatPage.dart';
-import 'package:sc_2006/pages/favPage.dart';
-import 'package:sc_2006/pages/searchPage.dart';
+import './booking_page.dart';
+import './chatPage.dart';
+import './favPage.dart';
+import './searchPage.dart';
 
 // void main() => runApp(MaterialApp(
 //       home: MapSample(),
@@ -170,32 +170,32 @@ class MapPageState extends State<MapPage> {
           color: Colors.grey,
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blue[900],
-        unselectedItemColor: Colors.white,
-        type: BottomNavigationBarType.fixed,
-        unselectedLabelStyle:
-            const TextStyle(color: Colors.white, fontSize: 14),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: Colors.white),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.search, color: Colors.white), label: 'Bookings'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.heart_broken_rounded, color: Colors.white),
-              label: 'Favourites'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.phone_in_talk, color: Colors.white),
-              label: 'Live Chat'),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black,
-        iconSize: 40,
-        onTap: _onItemTapped,
-        elevation: 5,
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: Colors.blue[900],
+      //   unselectedItemColor: Colors.white,
+      //   type: BottomNavigationBarType.fixed,
+      //   unselectedLabelStyle:
+      //       const TextStyle(color: Colors.white, fontSize: 14),
+      //   items: const [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home, color: Colors.white),
+      //       label: 'Search',
+      //     ),
+      //     BottomNavigationBarItem(
+      //         icon: Icon(Icons.search, color: Colors.white), label: 'Bookings'),
+      //     BottomNavigationBarItem(
+      //         icon: Icon(Icons.heart_broken_rounded, color: Colors.white),
+      //         label: 'Favourites'),
+      //     BottomNavigationBarItem(
+      //         icon: Icon(Icons.phone_in_talk, color: Colors.white),
+      //         label: 'Live Chat'),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   selectedItemColor: Colors.black,
+      //   iconSize: 40,
+      //   onTap: _onItemTapped,
+      //   elevation: 5,
+      // ),
     );
   }
 

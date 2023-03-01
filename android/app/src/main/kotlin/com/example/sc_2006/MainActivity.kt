@@ -1,4 +1,4 @@
-package com.example.sc_2006
+package com.example.carparkapp
 
 import io.flutter.embedding.android.FlutterActivity
 

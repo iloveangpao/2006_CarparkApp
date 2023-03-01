@@ -52,7 +52,6 @@ class _SearchPageState extends State<SearchPage> {
         centerTitle: true,
         title: Text(
           "Search",
-          style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Theme.of(context).primaryColor,
       ),

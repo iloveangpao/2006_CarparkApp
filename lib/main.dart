@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../pages/login_page.dart';
 import '../pages/booking_page.dart';
 import 'pages/searchPage.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,22 +23,28 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return MaterialApp(
       home: LoginPage(),
       debugShowCheckedModeBanner: false,
       title: 'Carparking App',
       theme: ThemeData(
+        textTheme: GoogleFonts.montserratTextTheme(textTheme).copyWith(
+          bodyMedium: GoogleFonts.sourceSansPro(),
+        ),
         sliderTheme: SliderThemeData(
             valueIndicatorColor: Colors.white,
             valueIndicatorTextStyle: TextStyle(color: Colors.black)),
         primaryColor: Color(0xFFD6F1FF),
         appBarTheme: AppBarTheme(
-          backgroundColor: Color(0xFFD6F1FF),
-          iconTheme: IconThemeData(color: Colors.black),
-          centerTitle: true,
-          titleTextStyle: TextStyle(
-              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-        ),
+            backgroundColor: Color(0xFFD6F1FF),
+            iconTheme: IconThemeData(color: Colors.black),
+            centerTitle: true,
+            titleTextStyle: GoogleFonts.montserrat(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            )),
       ),
     );
   }
