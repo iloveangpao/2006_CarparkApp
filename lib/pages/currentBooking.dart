@@ -19,7 +19,7 @@ class _currentBookingPage extends State<currentBookingPage> {
     String dateStr = "${today.day}-${today.month}-${today.year}";
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(title: Text("Live Chat"), leading: BackButton()),
+        appBar: AppBar(title: Text("Your Booking"), leading: BackButton()),
         body: SafeArea(
           child: Center(
             child: Column(
