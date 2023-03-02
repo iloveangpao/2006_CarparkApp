@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator_platform_interface/src/enums/location_permission.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'currentBooking.dart';
 import './booking_page.dart';
 import './chatPage.dart';
 import './favPage.dart';
@@ -53,7 +54,7 @@ class MapPage extends StatefulWidget {
 
 class MapPageState extends State<MapPage> {
   int _selectedIndex = 0;
-  final screens = [SearchPage(), BookingPage(), FavPage(), ChatPage()];
+  final screens = [SearchPage(), currentBookingPage(), FavPage(), ChatPage()];
 
   void _onItemTapped(int index) {
     setState(() {

@@ -1,3 +1,4 @@
+import 'package:carparkapp/pages/currentBooking.dart';
 import 'package:flutter/material.dart';
 import './booking_page.dart';
 import './chatPage.dart';
@@ -16,7 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     SearchPage(),
-    BookingPage(),
+    currentBookingPage(),
     MapPage(),
     FavPage(),
     ChatPage(),
