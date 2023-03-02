@@ -20,59 +20,93 @@ class _BookingPageState extends State<BookingPage> {
     DateTime today = DateTime.now();
     String dateStr = "${today.day}-${today.month}-${today.year}";
     return Scaffold(
-        backgroundColor: Colors.grey[300],
-        appBar: AppBar(leading: BackButton()),
+        backgroundColor: Theme.of(context).primaryColor,
+        appBar: AppBar(title: Text("Live Chat"),leading: BackButton()),
         body: SafeArea(
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Please Make your Booking For Today",
-                  style: TextStyle( fontSize: 30),
-                ),
                 SizedBox(
                   height: 10,
                 ),
-                Text(
-                  dateStr,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 45),
+                Container(
+                  decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10)
                 ),
-                SizedBox(height:50,),
-                Text(
-                  "This Booking System only allow you to book within 2 "
-                      " hour before you arrive at the destination ",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 100,
-                ),
-                MaterialButton(
-                  onPressed: _showTimePicker,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text('Pick a timing',
-                        style: TextStyle(color: Colors.white, fontSize: 30)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+            ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Please Make your Booking For Today",
+                        style: TextStyle( fontSize: 15),
+                      ),
+                      Text(
+                        dateStr,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 45),
+                      ),
+                      SizedBox(height:10,),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Text(
+                          "This Booking System only allow you to book within 2 "
+                              " hour before you arrive at the destination ",
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),textAlign: TextAlign.center,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: _showTimePicker,
+                        child: Container(
+                            padding: const EdgeInsets.all(20),
+                            margin: const EdgeInsets.symmetric(horizontal: 15),
+                            decoration: BoxDecoration(
+                              color: Color(0xff737373),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Center(child: Text(
+                              "Pick Your Timing",
+                              style: TextStyle(color: Colors.white,
+                                  fontSize: 20),))
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      )
+                    ],
                   ),
-                  color: Colors.blueGrey,
                 ),
-                SizedBox(
-                  height: 50,
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-            GestureDetector(
-              child: Container(
-                  padding: const EdgeInsets.all(25),
-                  margin: const EdgeInsets.symmetric(horizontal: 25),
-                  decoration: BoxDecoration(color: Colors.black,
-                    borderRadius: BorderRadius.circular(8),),
-                  child: Center(child: Text(
-                    "Confirm Your Booking",
-                    style: TextStyle(color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30),))
+                SizedBox(height:30),
+                GestureDetector(
+                  child: Container(
+                      padding: const EdgeInsets.all(20),
+                      margin: const EdgeInsets.symmetric(horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Center(child: Text(
+                        "Confirm Your Booking",
+                        style: TextStyle(color: Colors.white,
+                            fontSize: 30),))
                   ),
                 ),
               ],

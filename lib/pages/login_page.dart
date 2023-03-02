@@ -17,7 +17,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Theme.of(context).primaryColor,
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
@@ -28,13 +28,13 @@ class LoginPage extends StatelessWidget {
                   //Logo
                   Image.asset(
                     "images/2343894.png",
-                    height: 150,
+                    height: 120,
                   ),
                   const SizedBox(height: 50),
                   //Welcome back
                   Text(
                     "Welcome back you\'ve been missed!",
-                    style: TextStyle(color: Colors.grey[700], fontSize: 16),
+                    style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold ),
                   ),
                   const SizedBox(height: 25),
                   //username textfield
@@ -52,18 +52,6 @@ class LoginPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   //forgot password
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Forgot Password?',
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
-                      ],
-                    ),
-                  ),
                   const SizedBox(height: 25),
                   //sign in button
                   GestureDetector(
@@ -74,11 +62,11 @@ class LoginPage extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => HomePage()));
                     },
                     child: Container(
-                        padding: const EdgeInsets.all(25),
-                        margin: const EdgeInsets.symmetric(horizontal: 25),
+                        padding: const EdgeInsets.all(20),
+                        margin: const EdgeInsets.symmetric(horizontal: 15),
                         decoration: BoxDecoration(
                           color: Colors.black,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         child: Center(
                             child: Text(
@@ -89,63 +77,31 @@ class LoginPage extends StatelessWidget {
                               fontSize: 16),
                         ))),
                   ),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                      onTap: () {
+                        int index;
+                        String name;
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => RegisterPage()));
+                      },
+                    child: Container(
+                        padding: const EdgeInsets.all(20),
+                        margin: const EdgeInsets.symmetric(horizontal: 15),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Center(
+                            child: Text(
+                              "Register",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16),
+                            ))),
+                  ),
                   //or continue with
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child:
-                              Divider(thickness: 0.5, color: Colors.grey[400]),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text("Or Continue With",
-                              style: TextStyle(color: Colors.grey[700])),
-                        ),
-                        Expanded(
-                          child:
-                              Divider(thickness: 0.5, color: Colors.grey[400]),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 50),
-                  // google +apple sign in button
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      //Google
-                      SquareTile(imagePath: 'images/google-logo-9808.png'),
-
-                      const SizedBox(width: 10),
-                      //Apple
-                      SquareTile(imagePath: 'images/png-apple-logo-9711.png'),
-                    ],
-                  ),
-                  const SizedBox(height: 50),
-                  //not a member? register now
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Not a member?"),
-                      const SizedBox(width: 4),
-                      new GestureDetector(
-                        onTap: () {
-                          int index;
-                          String name;
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => RegisterPage()));
-                        },
-                        child: const Text(
-                          "Register now",
-                          style: TextStyle(
-                              color: Colors.blue, fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
-                  )
                 ],
               ),
             ),
