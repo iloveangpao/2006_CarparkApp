@@ -65,7 +65,7 @@ class LoginPage extends StatelessWidget {
                         padding: const EdgeInsets.all(20),
                         margin: const EdgeInsets.symmetric(horizontal: 15),
                         decoration: BoxDecoration(
-                          color: Colors.black,
+                          color: Color(0xff737373),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Center(
@@ -89,7 +89,7 @@ class LoginPage extends StatelessWidget {
                         padding: const EdgeInsets.all(20),
                         margin: const EdgeInsets.symmetric(horizontal: 15),
                         decoration: BoxDecoration(
-                          color: Colors.black,
+                          color: Color(0xff737373),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Center(
