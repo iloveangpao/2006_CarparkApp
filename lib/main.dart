@@ -5,6 +5,7 @@ import '../pages/login_page.dart';
 import '../pages/booking_page.dart';
 import 'pages/searchPage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../pages/map_page.dart';
 
 void main() {
   runApp(MyApp());
