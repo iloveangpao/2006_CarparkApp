@@ -1,5 +1,10 @@
+import 'package:carparkapp/carpark.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+
 
 void main(){
   runApp(MyApp());
@@ -9,12 +14,12 @@ class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Google Map",
-      debugShowCheckedModeBanner: false,
-      theme:ThemeData(
-        primaryColor: Colors.white,
-      ),
-      home:Scaffold()
+        title: "Google Map",
+        debugShowCheckedModeBanner: false,
+        theme:ThemeData(
+          primaryColor: Colors.white,
+        ),
+        home:MapScreen()
     );
   }
 }
@@ -25,18 +30,80 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  List<carpark> _carpark = <carpark>[];
+
+  Future<List<carpark>> fetchcarpark() async {
+    final response = await http.get(Uri.parse('http://20.187.121.122/avail/'));
+
+    var carparks = <carpark>[];
+
+    if (response.statusCode == 200) {
+
+      var carparksJson = json.decode(response.body);
+
+      for (var carparkJson in carparksJson) {
+        carparks.add(carpark.fromJson(carparkJson));
+      }
+      setState(() {
+        _carparks = carparks; // Update the carparks list with the fetched carparks
+      });
+    }
+    return carparks;
+  }
+
+  Set<Marker> _createMarkers() {
+    return _carparks.map((carpark) {
+      print("Hello");
+      print(carpark.latitude);// print statement here
+      return Marker(
+        markerId: MarkerId(carpark.carparkNo),
+        position: LatLng(carpark.latitude,carpark.longitude),
+        icon: BitmapDescriptor.defaultMarker,
+        infoWindow: InfoWindow(
+          title: carpark.carparkNo,
+          snippet: '${carpark.lotsAvailable} lots available',
+        ),
+      );
+    }).toSet();
+  }
+
+
+  static final Marker _testmarker = Marker(
+    markerId: MarkerId("_test"),
+    infoWindow: InfoWindow(title: "testmarker"),
+    icon: BitmapDescriptor.defaultMarker,
+    position: LatLng(1.31827878141546,103.87742961097146)
+  );
+
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchcarpark().then((carparks) {
+      setState(() {
+        _carparks = carparks;
+      });
+    });
+  }
+
+
   static const _initialCameraPosition = CameraPosition(
-    target: LatLng(1.388034525243647, 103.90178979616115),
-    zoom: 11.5,
+    target: LatLng(1.31827878141546,103.87742961097146),
+    zoom: 20.5,
   );
 
   late GoogleMapController _googleMapController;
+  List<carpark> _carparks = [];
 
   @override
   void dispose() {
     _googleMapController.dispose();
     super.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +113,13 @@ class _MapScreenState extends State<MapScreen> {
         zoomGesturesEnabled: false,
         initialCameraPosition:_initialCameraPosition ,
         onMapCreated: (controller) => _googleMapController = controller,
+        markers: _createMarkers()
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.black,
         onPressed: () => _googleMapController.animateCamera(
-          CameraUpdate.newCameraPosition(_initialCameraPosition)
+            CameraUpdate.newCameraPosition(_initialCameraPosition)
         ),
         child: const Icon(Icons.center_focus_strong),
       ),
