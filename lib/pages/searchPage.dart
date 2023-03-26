@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../classes/carparks.dart';
 import 'filterPage.dart';
+import 'searchPageArea.dart';
+
+//server ip address http://20.187.121.122/
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -56,6 +59,12 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Column(children: <Widget>[
+        ElevatedButton(
+            onPressed: () =>
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const SearchPageArea();
+                })),
+            child: Text("searchArea")),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
