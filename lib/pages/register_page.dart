@@ -10,21 +10,60 @@ class RegisterPage extends StatelessWidget {
 
   //text editing controller
   final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void signUpUser() async {
+  Future<void> signUpUser(BuildContext context) async {
     var url = Uri.parse('http://20.187.121.122/users/');
 
-    var response = await http.post(url, body: {
-      'email': usernameController.text,
-      'password': passwordController.text,
-    });
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'username': usernameController.text,
+        'email': emailController.text,
+        'password': passwordController.text,
+      }),
+    );
 
     if (response.statusCode == 200) {
       // User was successfully signed up
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Sign up successful'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          });
     } else {
-      
       // An error occurred
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Sign up unsuccessful'),
+              content: Text(response.body),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          });
     }
   }
 
@@ -57,6 +96,13 @@ class RegisterPage extends StatelessWidget {
                     obscureText: false,
                   ),
                   const SizedBox(height: 10),
+                  //username textfield
+                  MyTextfield(
+                    controller: emailController,
+                    hintText: 'Email',
+                    obscureText: false,
+                  ),
+                  const SizedBox(height: 10),
                   //password textfield
                   MyTextfield(
                     controller: passwordController,
@@ -81,7 +127,7 @@ class RegisterPage extends StatelessWidget {
                   const SizedBox(height: 25),
                   //sign in button
                   GestureDetector(
-                    onTap: signUpUser,
+                    onTap: () => signUpUser(context),
                     child: Container(
                         padding: const EdgeInsets.all(25),
                         margin: const EdgeInsets.symmetric(horizontal: 25),
