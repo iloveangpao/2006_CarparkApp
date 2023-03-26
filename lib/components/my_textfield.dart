@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 class MyTextfield extends StatelessWidget {
   final controller;
   final String hintText;
+  final FormFieldValidator<String>? validator;
   final bool obscureText;
+
   const MyTextfield({
     super.key,
     required this.controller,
     required this.hintText,
     required this.obscureText,
+    this.validator,
   });
 
   @override

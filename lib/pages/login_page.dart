@@ -16,13 +16,80 @@ class LoginPage extends StatelessWidget {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
+ void login(BuildContext context, String email, String password) async{
+    final url = Uri.parse('http://20.187.121.122/token');
+    final response = await http.post(
+        url,
+        body:{
+          'username' : email,
+          'password' : password
+        }
+    );
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body.toString());
+      await storage.write(key: "token", value: data['token']);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(email: email),
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Login Failed"),
+            content: Text("Invalid username or password"),
+            actions: [
+              TextButton(
+                child: Text("OK"),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            ],
+          );
+        },
+      );
+    }
+  }
+  /*
+  void login(BuildContext context, String email, String password) async{
+    final url = Uri.parse('http://20.187.121.122/users?email=$email&password=$password');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(email: email),
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Login Failed"),
+            content: Text("Invalid username or password"),
+            actions: [
+              TextButton(
+                child: Text("OK"),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            ],
+          );
+        },
+      );
+    }
+  }*/
+
+
   void signUserIn(BuildContext context) async {
     final url = Uri.parse('http://20.187.121.122/users?email=${usernameController.text}&password=${passwordController.text}');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       Navigator.push(
-          context,
-          MaterialPageRoute(
+        context,
+        MaterialPageRoute(
           builder: (context) => HomePage(email: usernameController.text),
         ),
       );
@@ -44,6 +111,7 @@ class LoginPage extends StatelessWidget {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,6 +140,12 @@ class LoginPage extends StatelessWidget {
                     controller: usernameController,
                     hintText: 'Username',
                     obscureText: false,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 25),
                   //password textfield
@@ -79,6 +153,12 @@ class LoginPage extends StatelessWidget {
                     controller: passwordController,
                     hintText: 'Password',
                     obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 10),
                   //forgot password
@@ -86,7 +166,8 @@ class LoginPage extends StatelessWidget {
                   //sign in button
                   GestureDetector(
                     onTap: () {
-                     signUserIn(context);
+                     login(context,usernameController.text, passwordController.text);
+                      //signUserIn(context);
                     },
                     child: Container(
                         padding: const EdgeInsets.all(20),
