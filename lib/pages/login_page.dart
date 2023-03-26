@@ -1,19 +1,49 @@
+import 'package:carparkapp/pages/User.dart';
 import 'package:flutter/material.dart';
 import './home_page.dart';
 import './map_page.dart';
 import '../components/my_textfield.dart';
 import '../components/square_tile.dart';
 import 'register_page.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
-
   //text editing controller
+  final storage = FlutterSecureStorage();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void signUserIn() {}
-
+  void signUserIn(BuildContext context) async {
+    final url = Uri.parse('http://20.187.121.122/users?email=${usernameController.text}&password=${passwordController.text}');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+          builder: (context) => HomePage(email: usernameController.text),
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Login Failed"),
+            content: Text("Invalid username or password"),
+            actions: [
+              TextButton(
+                child: Text("OK"),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            ],
+          );
+        },
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,10 +86,7 @@ class LoginPage extends StatelessWidget {
                   //sign in button
                   GestureDetector(
                     onTap: () {
-                      int index;
-                      String name;
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => HomePage()));
+                     signUserIn(context);
                     },
                     child: Container(
                         padding: const EdgeInsets.all(20),

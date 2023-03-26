@@ -8,7 +8,9 @@ import './searchPage.dart';
 
 //page that holds bottom nav bar
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String email;
+
+  const HomePage({Key? key, required this.email}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();

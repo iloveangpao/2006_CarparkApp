@@ -1,6 +1,9 @@
+import 'package:carparkapp/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import '../components/my_textfield.dart';
 import '../components/square_tile.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -9,7 +12,21 @@ class RegisterPage extends StatelessWidget {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void signUserIn() {}
+  void signUpUser() async {
+    var url = Uri.parse('http://20.187.121.122/users/');
+
+    var response = await http.post(url, body: {
+      'email': usernameController.text,
+      'password': passwordController.text,
+    });
+
+    if (response.statusCode == 200) {
+      // User was successfully signed up
+    } else {
+      
+      // An error occurred
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +45,6 @@ class RegisterPage extends StatelessWidget {
                     height: 120,
                   ),
                   const SizedBox(height: 25),
-                  //Welcome back
                   Text(
                     "Create your account in less then a minute !",
                     style: TextStyle(color: Colors.black, fontSize: 16),
@@ -65,6 +81,7 @@ class RegisterPage extends StatelessWidget {
                   const SizedBox(height: 25),
                   //sign in button
                   GestureDetector(
+                    onTap: signUpUser,
                     child: Container(
                         padding: const EdgeInsets.all(25),
                         margin: const EdgeInsets.symmetric(horizontal: 25),
@@ -81,7 +98,31 @@ class RegisterPage extends StatelessWidget {
                               fontSize: 16),
                         ))),
                   ),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                      onTap: () {
+                        int index;
+                        String name;
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => LoginPage()));
+                      },
+                    child: Container(
+                        padding: const EdgeInsets.all(25),
+                        margin: const EdgeInsets.symmetric(horizontal: 25),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                            child: Text(
+                              "Back",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16),
+                            ))),
+                  ),
+
                   //or continue with
                 ],
               ),
