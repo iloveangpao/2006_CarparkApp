@@ -1,5 +1,6 @@
 import 'package:carparkapp/carpark.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -75,7 +76,16 @@ class _MapScreenState extends State<MapScreen> {
     position: LatLng(1.31827878141546,103.87742961097146)
   );
 
+  LatLng? _currentLocation;
 
+  void _getCurrentLocation() async {
+    final Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    setState(() {
+      _currentLocation = LatLng(position.latitude, position.longitude);
+    });
+  }
 
 
   @override
@@ -86,6 +96,7 @@ class _MapScreenState extends State<MapScreen> {
         _carparks = carparks;
       });
     });
+    _getCurrentLocation();
   }
 
 
@@ -111,16 +122,24 @@ class _MapScreenState extends State<MapScreen> {
       body: GoogleMap(
         myLocationButtonEnabled: false,
         zoomGesturesEnabled: false,
-        initialCameraPosition:_initialCameraPosition ,
+        initialCameraPosition: _currentLocation == null
+            ? _initialCameraPosition
+            : CameraPosition(target: _currentLocation!, zoom: 15),
         onMapCreated: (controller) => _googleMapController = controller,
         markers: _createMarkers()
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.black,
-        onPressed: () => _googleMapController.animateCamera(
-            CameraUpdate.newCameraPosition(_initialCameraPosition)
-        ),
+        onPressed: () {
+          if (_currentLocation != null) {
+            _googleMapController.animateCamera(
+              CameraUpdate.newCameraPosition(
+                CameraPosition(target: _currentLocation!, zoom: 15),
+              ),
+            );
+          }
+        },
         child: const Icon(Icons.center_focus_strong),
       ),
     );
