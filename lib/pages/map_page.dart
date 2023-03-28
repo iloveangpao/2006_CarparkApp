@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import './booking_page.dart';
 
 
 
@@ -64,9 +65,17 @@ class _MapScreenState extends State<MapScreen> {
           title: carpark.carparkNo,
           snippet: '${carpark.lotsAvailable} lots available',
         ),
+        onTap: () {
+          // Navigate to the booking page
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => BookingPage()),
+          );
+        },
       );
     }).toSet();
   }
+
 
 
   static final Marker _testmarker = Marker(
