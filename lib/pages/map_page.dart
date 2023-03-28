@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../classes/carpark.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -53,6 +55,14 @@ class _MapScreenState extends State<MapScreen> {
     return carparks;
   }
 
+  void _updateCarparks() async {
+    print("hellllllllo");
+    var carparks = await fetchcarpark();
+    setState(() {
+      _carparks = carparks;
+    });
+  }
+
   Set<Marker> _createMarkers() {
     return _carparks.map((carpark) {
       print("Hello");
@@ -72,6 +82,7 @@ class _MapScreenState extends State<MapScreen> {
             MaterialPageRoute(builder: (context) => BookingPage()),
           );
         },
+
       );
     }).toSet();
   }
@@ -100,12 +111,14 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
-    fetchcarpark().then((carparks) {
-      setState(() {
-        _carparks = carparks;
-      });
-    });
+    // fetchcarpark().then((carparks) {
+    //   setState(() {
+    //     _carparks = carparks;
+    //   });
+    // });
+    _updateCarparks();
     _getCurrentLocation();
+    Timer.periodic(Duration(seconds: 10), (Timer t) => _updateCarparks());
   }
 
 
