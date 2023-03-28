@@ -4,7 +4,7 @@ import './booking_page.dart';
 import './chatPage.dart';
 import './favPage.dart';
 import './map_page.dart';
-import './searchPage.dart';
+import './SearchPageArea.dart';
 
 //page that holds bottom nav bar
 class HomePage extends StatefulWidget {
@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
-    SearchPage(),
+    SearchPageArea(),
     currentBookingPage(),
     MapPage(),
     FavPage(),

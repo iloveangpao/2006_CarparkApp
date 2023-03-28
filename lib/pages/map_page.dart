@@ -9,7 +9,7 @@ import 'currentBooking.dart';
 import './booking_page.dart';
 import './chatPage.dart';
 import './favPage.dart';
-import './searchPage.dart';
+import './SearchPageArea.dart';
 
 // void main() => runApp(MaterialApp(
 //       home: MapSample(),
@@ -54,7 +54,12 @@ class MapPage extends StatefulWidget {
 
 class MapPageState extends State<MapPage> {
   int _selectedIndex = 0;
-  final screens = [SearchPage(), currentBookingPage(), FavPage(), ChatPage()];
+  final screens = [
+    SearchPageArea(),
+    currentBookingPage(),
+    FavPage(),
+    ChatPage()
+  ];
 
   void _onItemTapped(int index) {
     setState(() {

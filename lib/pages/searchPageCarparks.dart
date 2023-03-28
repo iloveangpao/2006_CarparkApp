@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'rankingPage.dart';
 
 class SearchPageCarparks extends StatefulWidget {
   const SearchPageCarparks(
@@ -20,12 +21,34 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
 //nearbyCP/X,Y/asdsad
   List<dynamic> searchData = [];
 
-  Future<void> _fetchData() async {
+  Future<void> _fetchDataInit() async {
     setState(() {
       _isLoading = true;
     });
     final url = Uri.parse(
-        'http://20.187.121.122/nearbyCP/${widget.x_coords},${widget.y_coords}/asd');
+        'http://20.187.121.122/nearbyCP/${widget.x_coords},${widget.y_coords}/id/T');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      setState(() {
+        searchData = jsonResponse;
+        _isLoading = false;
+      });
+    } else {
+      print("ERROR");
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _fetchDataRanking(String rankType) async {
+    setState(() {
+      _isLoading = true;
+    });
+    final url = Uri.parse(
+        'http://20.187.121.122/nearbyCP/${widget.x_coords},${widget.y_coords}/$rankType/T');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -45,7 +68,7 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
   @override
   void initState() {
     super.initState();
-    _fetchData();
+    _fetchDataInit();
   }
 
   @override
@@ -61,7 +84,21 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Column(children: <Widget>[
-        Text("List of carparks within 5 min of your selected area:"),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Carparks within 500m of your searched area:",
+                style: TextStyle(fontSize: 16)),
+            IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return RankingPage(rankFunction: _fetchDataRanking);
+                }));
+              },
+              icon: Icon(Icons.tune),
+            ),
+          ],
+        ),
         _isLoading
             ? const Center(child: CircularProgressIndicator())
             : Expanded(
@@ -71,8 +108,10 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
                       final data = searchData[index];
                       return ListTile(
                         title: Text(data['name']),
-                        subtitle: Text(
-                            "Rate: " + data['Rates']['weekdayRate'] + "/hr"),
+                        subtitle: Text("Rate: " +
+                            data['Rates']['weekdayRate'].toString() +
+                            "/hr\n" +
+                            "Availability: ${data['Availability']} lots"),
                       );
                     })),
       ]),

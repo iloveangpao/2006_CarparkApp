@@ -64,7 +64,7 @@ class _SearchPageState extends State<SearchPage> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return const SearchPageArea();
                 })),
-            child: Text("searchArea")),
+            child: Text("Search by Area")),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),

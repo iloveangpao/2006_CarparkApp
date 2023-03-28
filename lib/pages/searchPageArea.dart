@@ -113,11 +113,6 @@ class _SearchPageAreaState extends State<SearchPageArea> {
                     // isThreeLine: true,
                   );
                 })),
-        ElevatedButton(
-            onPressed: () {
-              print("X coords:${x_coord}\t Y coords:${y_coord}");
-            },
-            child: Text("X coords"))
       ]),
     );
   }
