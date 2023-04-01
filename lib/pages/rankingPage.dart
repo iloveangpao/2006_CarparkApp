@@ -19,7 +19,7 @@ class _RankingPageState extends State<RankingPage> {
       body: Center(
         child: Column(children: [
           Text(
-            "Rank By:",
+            "Filter By:",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           ElevatedButton(
@@ -31,7 +31,7 @@ class _RankingPageState extends State<RankingPage> {
           ElevatedButton(
               onPressed: () {
                 //To change later for price
-                widget.rankFunction("name");
+                widget.rankFunction("rate");
                 Navigator.pop(context);
               },
               child: Text("Price")),

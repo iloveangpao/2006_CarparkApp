@@ -47,8 +47,16 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
     setState(() {
       _isLoading = true;
     });
-    final url = Uri.parse(
-        'http://20.187.121.122/nearbyCP/${widget.x_coords},${widget.y_coords}/$rankType/T');
+    var url;
+    if (rankType == 'rate') {
+      //only for price rates rank low to high
+      url = Uri.parse(
+          'http://20.187.121.122/nearbyCP/${widget.x_coords},${widget.y_coords}/$rankType/F');
+    } else {
+      url = Uri.parse(
+          'http://20.187.121.122/nearbyCP/${widget.x_coords},${widget.y_coords}/$rankType/T');
+    }
+
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -106,12 +114,17 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
                     itemCount: searchData.length,
                     itemBuilder: (context, index) {
                       final data = searchData[index];
+                      var data_avail = data['Availability'];
+                      print(data_avail.runtimeType);
+                      if (data_avail == null) {
+                        data_avail = 'No data for';
+                      }
                       return ListTile(
                         title: Text(data['name']),
-                        subtitle: Text("Rate: " +
-                            data['Rates']['weekdayRate'].toString() +
+                        subtitle: Text("Rate: \$" +
+                            data['rate'].toString() +
                             "/hr\n" +
-                            "Availability: ${data['Availability']} lots"),
+                            "Availability: $data_avail lots"),
                       );
                     })),
       ]),
