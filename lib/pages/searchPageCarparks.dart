@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'rankingPage.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'bookingSpecificPage.dart';
 
 class SearchPageCarparks extends StatefulWidget {
   const SearchPageCarparks(
@@ -12,6 +15,39 @@ class SearchPageCarparks extends StatefulWidget {
 
   @override
   State<SearchPageCarparks> createState() => _SearchPageCarparksState();
+}
+
+Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+  print(directory.toString() + "    this is path");
+
+  return directory.path;
+}
+
+Future<File> get _localFile async {
+  final path = await _localPath;
+  return File('$path/data.txt');
+}
+
+Future<int> readCounter() async {
+  try {
+    final file = await _localFile;
+
+    // Read the file
+    final contents = await file.readAsString();
+
+    return int.parse(contents);
+  } catch (e) {
+    // If encountering an error, return 0
+    return 0;
+  }
+}
+
+Future<File> writeCounter(var jsonVals) async {
+  final file = await _localFile;
+
+  // Write the file
+  return file.writeAsString('tf lol');
 }
 
 class _SearchPageCarparksState extends State<SearchPageCarparks> {
@@ -31,6 +67,7 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
+
       setState(() {
         searchData = jsonResponse;
         _isLoading = false;
@@ -125,6 +162,18 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
                             data['rate'].toString() +
                             "/hr\n" +
                             "Availability: $data_avail lots"),
+                        onTap: () {
+                          print(data.toString());
+                          print(
+                              "X:" + widget.x_coords + "Y: " + widget.y_coords);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return BookingSpecificPage(
+                              carparkName: data['name'],
+                              lots: data['lots'],
+                            );
+                          }));
+                        },
                       );
                     })),
       ]),
