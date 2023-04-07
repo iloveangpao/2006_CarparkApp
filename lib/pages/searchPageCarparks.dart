@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'rankingPage.dart';
-import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'bookingSpecificPage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:convert';
 
 class SearchPageCarparks extends StatefulWidget {
   const SearchPageCarparks(
@@ -17,42 +18,10 @@ class SearchPageCarparks extends StatefulWidget {
   State<SearchPageCarparks> createState() => _SearchPageCarparksState();
 }
 
-Future<String> get _localPath async {
-  final directory = await getApplicationDocumentsDirectory();
-  print(directory.toString() + "    this is path");
-
-  return directory.path;
-}
-
-Future<File> get _localFile async {
-  final path = await _localPath;
-  return File('$path/data.txt');
-}
-
-Future<int> readCounter() async {
-  try {
-    final file = await _localFile;
-
-    // Read the file
-    final contents = await file.readAsString();
-
-    return int.parse(contents);
-  } catch (e) {
-    // If encountering an error, return 0
-    return 0;
-  }
-}
-
-Future<File> writeCounter(var jsonVals) async {
-  final file = await _localFile;
-
-  // Write the file
-  return file.writeAsString('tf lol');
-}
-
 class _SearchPageCarparksState extends State<SearchPageCarparks> {
   final searchController = TextEditingController();
   bool _isLoading = false;
+  final storage = FlutterSecureStorage();
 
 //nearbyCP/X,Y/asdsad
   List<dynamic> searchData = [];
@@ -110,6 +79,38 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
     }
   }
 
+  void createFav(String cpCode) async {
+    final token = await storage.read(key: "access_token");
+    print("token Read: $token");
+    final favBody = {'cp_code': cpCode};
+    final url1 = Uri.parse('http://20.187.121.122/favourite/?cp_code=$cpCode');
+    final response = await http.post(url1,
+        headers: <String, String>{
+          'accept': 'application/json',
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(favBody));
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      //shows alert that favourite went through
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 1), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              title: Text('Favourited successfully'),
+            );
+          });
+    } else if (response.statusCode == 422) {
+      print("Validation Error");
+    } else {
+      print("Status Code error ${response.statusCode}");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -152,16 +153,32 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
                     itemBuilder: (context, index) {
                       final data = searchData[index];
                       var data_avail = data['Availability'];
+                      String data_name = data['name'];
+                      String data_cpCode = data['cp_code'];
                       print(data_avail.runtimeType);
                       if (data_avail == null) {
                         data_avail = 'No data for';
                       }
                       return ListTile(
-                        title: Text(data['name']),
+                        title: Text("$data_name ($data_cpCode)"),
                         subtitle: Text("Rate: \$" +
                             data['rate'].toString() +
                             "/hr\n" +
                             "Availability: $data_avail lots"),
+                        trailing: ElevatedButton(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text("Favourite"),
+                              Icon(Icons.favorite_border_outlined)
+                            ],
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFFF40000)),
+                          onPressed: () {
+                            createFav(data_cpCode);
+                          },
+                        ),
                         onTap: () {
                           print(data.toString());
                           print(
