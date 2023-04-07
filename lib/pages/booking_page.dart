@@ -15,6 +15,7 @@ class BookingPage extends StatefulWidget {
 }
 
 class _BookingPageState extends State<BookingPage> {
+  String? selectedLotId;
   ParkingLot? parkingLot;
   Future<ParkingLot> fetchParkingLot(String carparkNo) async {
     final response = await http.get(Uri.parse('http://20.187.121.122/carpark/'));
@@ -50,7 +51,7 @@ class _BookingPageState extends State<BookingPage> {
     if (bookingTime != null) {
       final bookingBody = {
         'start_time': bookingTime!.toIso8601String(), // use the selected time in the body
-        'lot_id' : '1'
+        'lot_id' : selectedLotId,
       };
       final response = await http.post(Uri.parse('http://20.187.121.122/booking/'),
           headers: <String, String>{
@@ -95,26 +96,46 @@ class _BookingPageState extends State<BookingPage> {
             child: Column(
               children: [
 
+                if (parkingLot != null)
+                  Column(
+                    children: [
+                      Text("Lots available:"),
+                      DropdownButton<String>(
+                        value: selectedLotId, // set the value of the dropdown to the selected lot id
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedLotId = newValue!;
+                          });
+                        },
+                        items: parkingLot!.lots.map((lot) => DropdownMenuItem<String>(
+                          value: lot['id'].toString(),
+                          child: Text(lot['id'].toString()),
+                        )).toList(),
+                      ),
+                    ],
+                  ),
+
+
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10)
-                  ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)
                       ),
-                    ],
-            ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
