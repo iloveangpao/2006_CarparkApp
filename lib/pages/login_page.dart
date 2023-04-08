@@ -37,7 +37,6 @@ class LoginPage extends StatelessWidget {
       var data = jsonDecode(response.body.toString());
      print("Data: $data");
       await storage.write(key: "access_token", value: data['access_token']);
-
       getUserDetails(context);
       Navigator.push(
         context,

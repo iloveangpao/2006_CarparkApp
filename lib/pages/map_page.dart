@@ -56,7 +56,6 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _updateCarparks() async {
-    print("hellllllllo");
     var carparks = await fetchcarpark();
     setState(() {
       _carparks = carparks;
@@ -65,8 +64,6 @@ class _MapScreenState extends State<MapScreen> {
 
   Set<Marker> _createMarkers() {
     return _carparks.map((carpark) {
-      print("Hello");
-      print(carpark.latitude);// print statement here
       return Marker(
         markerId: MarkerId(carpark.carparkNo),
         position: LatLng(carpark.latitude,carpark.longitude),
@@ -79,7 +76,9 @@ class _MapScreenState extends State<MapScreen> {
           // Navigate to the booking page
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => BookingPage()),
+            MaterialPageRoute(
+              builder: (context) => BookingPage(carparkNo: carpark.carparkNo),
+            ),
           );
         },
 

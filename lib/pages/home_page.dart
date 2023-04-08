@@ -10,7 +10,7 @@ import './SearchPageArea.dart';
 class HomePage extends StatefulWidget {
   final String email;
 
-  const HomePage({Key? key, required this.email}) : super(key: key);
+  HomePage({required this.email});
 
   @override
   State<HomePage> createState() => _HomePageState();
