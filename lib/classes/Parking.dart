@@ -1,5 +1,5 @@
 class ParkingLot {
-  final String? id;
+  final int? id;
   final String cpCode;
   final String name;
   final Map<String, dynamic> locations;
@@ -22,7 +22,11 @@ class ParkingLot {
   factory ParkingLot.fromJson(Map<String, dynamic> json) {
     List<Map<String, dynamic>> lotsList = [];
     for (var lot in json['lots']) {
-      lotsList.add({'id': lot['id'], 'cp_code': lot['cp_code']});
+      lotsList.add({
+        'id': lot['id'],
+        'cp_code': lot['cp_code'],
+        'occupied': lot['occupied']
+      });
     }
 
     return ParkingLot(
@@ -40,7 +44,7 @@ class ParkingLot {
   Map<String, dynamic> toJson() {
     List<Map<String, dynamic>> lotsList = [];
     for (var lot in this.lots) {
-      lotsList.add({'id': lot['id'], 'cp_code': lot['cp_code']});
+      lotsList.add({'id': lot['id'], 'cp_code': lot['cp_code'], 'occupied': lot['occupied']});
     }
 
     final Map<String, dynamic> data = new Map<String, dynamic>();
