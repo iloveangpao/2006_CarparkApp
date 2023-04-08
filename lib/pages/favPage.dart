@@ -87,13 +87,13 @@ class _FavPageState extends State<FavPage> {
                     itemCount: favData.length,
                     itemBuilder: (context, index) {
                       final data = favData[index];
-                      var data_cpCode = data['cp_code'];
+                      String data_cpCode = data['cp_code'];
                       return ListTile(
                         title: Text("Carpark Code: $data_cpCode"),
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return BookingPage();
+                            return BookingPage(carparkNo: data_cpCode);
                           }));
                         },
                       );

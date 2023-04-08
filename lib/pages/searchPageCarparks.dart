@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'rankingPage.dart';
 import 'dart:io';
-import 'bookingSpecificPage.dart';
+import './booking_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
@@ -185,10 +185,7 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
                               "X:" + widget.x_coords + "Y: " + widget.y_coords);
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return BookingSpecificPage(
-                              carparkName: data['name'],
-                              lots: data['lots'],
-                            );
+                            return BookingPage(carparkNo: data_cpCode);
                           }));
                         },
                       );
