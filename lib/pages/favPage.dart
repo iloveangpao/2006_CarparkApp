@@ -17,9 +17,13 @@ class FavPage extends StatefulWidget {
 class _FavPageState extends State<FavPage> {
   final searchController = TextEditingController();
   final storage = FlutterSecureStorage();
+  bool _isLoading = false;
   List<dynamic> favData = [];
 
   void fetchData() async {
+    setState(() {
+      _isLoading = true;
+    });
     final token = await storage.read(key: "access_token");
     print("token Read: $token");
     final url = Uri.parse('http://20.187.121.122/favourite/me/');
@@ -36,9 +40,13 @@ class _FavPageState extends State<FavPage> {
       final jsonResponse = json.decode(response.body);
       setState(() {
         favData = jsonResponse;
+        _isLoading = false;
       });
     } else {
       print("Error");
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -53,6 +61,7 @@ class _FavPageState extends State<FavPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
+        leading: BackButton(onPressed: () => Navigator.of(context).pop()),
         elevation: 0.0,
         centerTitle: true,
         title: Row(
@@ -98,6 +107,33 @@ class _FavPageState extends State<FavPage> {
                         },
                       );
                     })),
+        _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : favData.isEmpty
+                ? Center(
+                    child: Text(
+                      "No Favourites added yet",
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                        itemCount: favData.length,
+                        itemBuilder: (context, index) {
+                          final data = favData[index];
+                          String data_cpCode = data['cp_code'];
+                          return ListTile(
+                            title: Text("Carpark Code: $data_cpCode"),
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return BookingPage(cpCode: data_cpCode);
+                              }));
+                            },
+                          );
+                        })),
       ]),
     );
   }
