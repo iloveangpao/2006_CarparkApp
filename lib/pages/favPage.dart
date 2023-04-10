@@ -83,30 +83,6 @@ class _FavPageState extends State<FavPage> {
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Column(children: <Widget>[
-        favData.isEmpty
-            ? Center(
-                child: Text(
-                  "No Favourites added yet",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              )
-            : Expanded(
-                child: ListView.builder(
-                    itemCount: favData.length,
-                    itemBuilder: (context, index) {
-                      final data = favData[index];
-                      String data_cpCode = data['cp_code'];
-                      return ListTile(
-                        title: Text("Carpark Code: $data_cpCode"),
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return BookingPage(cpCode: data_cpCode);
-                          }));
-                        },
-                      );
-                    })),
         _isLoading
             ? const Center(child: CircularProgressIndicator())
             : favData.isEmpty
