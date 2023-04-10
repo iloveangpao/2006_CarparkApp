@@ -75,7 +75,7 @@ class _BookingPageState extends State<BookingPage> {
     // print(bookingStartTime!.toIso8601String());
     // print(bookingEndTime!.toIso8601String()); // print the end time
 
-    if (bookingStartTime != null && bookingEndTime != null) { // check if both start and end time are set
+    if (selectedLotId != null && bookingStartTime != null && bookingEndTime != null) { // check if both start and end time are set
       final bookingBody = {
         'start_time': bookingStartTime!.toIso8601String(),
         'end_time': bookingEndTime!.toIso8601String(), // include the end time in the booking body
@@ -184,11 +184,6 @@ class _BookingPageState extends State<BookingPage> {
                           onPressed: _showEndTimePicker, // new button to select end time
                           child: Text("Select End Time"),
                         ),
-                        SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: _submitBooking,
-                          child: Text("Submit Booking"),
-                        ),
                       ],
                     ),
 
@@ -205,7 +200,7 @@ class _BookingPageState extends State<BookingPage> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Center(child: Text(
-                        "Confirm Your Booking: ${widget.cpCode} ${parkingLot!.name}",
+                        "Confirm Your Booking",
                         style: TextStyle(color: Colors.white,
                             fontSize: 20),))
                   ),
