@@ -22,7 +22,6 @@ class _HomePageState extends State<HomePage> {
     currentBookingPage(),
     MapPage(),
     FavPage(),
-    ChatPage(),
   ];
   int _selectedPageIndex = 2;
 
@@ -64,11 +63,6 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.favorite),
             label: "Favourites",
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.chat_rounded),
-            label: "Live Chat",
           ),
         ],
       ),
