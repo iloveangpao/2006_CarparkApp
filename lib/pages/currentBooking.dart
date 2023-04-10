@@ -31,7 +31,7 @@ class _currentBookingPage extends State<currentBookingPage> {
 
   // check if both start and end time are set
 
-    final response = await http.get(Uri.parse('http://20.187.121.122/booking/me'),
+    final response = await http.get(Uri.parse('http://20.187.121.122/booking/me/'),
         headers: <String, String>{
           'accept': 'application/json',
           'Authorization': 'Bearer $token',
