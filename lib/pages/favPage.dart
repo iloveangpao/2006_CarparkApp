@@ -93,7 +93,7 @@ class _FavPageState extends State<FavPage> {
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return BookingPage(carparkNo: data_cpCode);
+                            return BookingPage(cpCode: data_cpCode);
                           }));
                         },
                       );

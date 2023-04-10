@@ -78,34 +78,24 @@ class _currentBookingPage extends State<currentBookingPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            const Text(
-              'Roadside Carpark',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Text(
+              'Capark: ${bookings.first.name}',
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              '267 Pasir Ris Dr, Singapore 678912',
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Text(
               'Lot Booked: ${bookings.first.lotId}',
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 30),
             ),
             const SizedBox(height: 8),
+            Text(
+              'Lot Booked: ${bookings.first.cpCode}',
+              style: const TextStyle(fontSize: 30),
+            ),
+            const SizedBox(height: 30),
             Text(
               'Time of Booking: ${bookings.first.startTime}',
-              style: const TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Duration booked: ${bookings.first.min} hour(s)',
-              style: const TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Price paid:/hr',
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 30),
             ),
           ],
         ),

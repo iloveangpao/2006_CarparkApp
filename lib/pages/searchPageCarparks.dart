@@ -185,7 +185,7 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
                               "X:" + widget.x_coords + "Y: " + widget.y_coords);
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return BookingPage(carparkNo: data_cpCode);
+                            return BookingPage(cpCode: data_cpCode);
                           }));
                         },
                       );

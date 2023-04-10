@@ -101,6 +101,35 @@ class _BookingPageState extends State<BookingPage> {
     }
   }
 
+  void _submitfav(String cpCode) async {
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: "access_token");
+    // print("token Read: $token");
+    // print(bookingStartTime!.toIso8601String());
+    // print(bookingEndTime!.toIso8601String()); // print the end time
+
+    // check if both start and end time are set
+    print(cpCode);
+    final bookingBody = {
+      'cp_code': cpCode,
+    };
+    final response = await http.post(Uri.parse('http://20.187.121.122/favourite/?cp_code=$cpCode'),
+        headers: <String, String>{
+          'accept': 'application/json',
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode(bookingBody));
+    if (response.statusCode == 200) {
+      // handle success
+      print("success!");
+    } else {
+      // handle error
+      print(response.body);
+    }
+
+  }
+
   @override
   void initState() {
     super.initState();
@@ -117,7 +146,14 @@ class _BookingPageState extends State<BookingPage> {
     String dateStr = "${today.day}-${today.month}-${today.year}";
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(title: Text("CurrentBooking"),leading: BackButton()),
+        appBar: AppBar(title: Text("CurrentBooking"),leading: BackButton(), actions: [
+        IconButton(
+        icon: Icon(Icons.favorite_border),
+      onPressed: () {
+        _submitfav(widget.cpCode);
+      },
+    ),
+    ],),
         body: SafeArea(
           child: Center(
             child: Column(
