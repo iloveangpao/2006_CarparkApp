@@ -1,4 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+
+import '../classes/Parking.dart';
+import '../classes/curbooking.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class currentBookingPage extends StatefulWidget {
   const currentBookingPage({Key? key}) : super(key: key);
@@ -8,179 +15,101 @@ class currentBookingPage extends StatefulWidget {
 }
 
 class _currentBookingPage extends State<currentBookingPage> {
+  List<BookingInfo> bookings = [];
+
   //show time picker
   void _showTimePicker() {
     showTimePicker(context: context, initialTime: TimeOfDay.now());
   }
 
+  void _submitBooking() async {
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: "access_token");
+    print("token Read: $token");
+    // print(bookingStartTime!.toIso8601String());
+    // print(bookingEndTime!.toIso8601String()); // print the end time
+
+  // check if both start and end time are set
+
+    final response = await http.get(Uri.parse('http://20.187.121.122/booking/me'),
+        headers: <String, String>{
+          'accept': 'application/json',
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json'
+        },
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      bookings = data
+          .map((json) => BookingInfo.fromJson(json))
+          .toList();
+      print("success!");
+      print('Lot ID: ${bookings.first.lotId}');
+      setState(() {});
+
+    }
+ else {
+      // handle error
+      print(response.body);
+    }
+  }
+
+  @override
+  void initState() {
+    _submitBooking();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    DateTime today = DateTime.now();
-    String dateStr = "${today.day}-${today.month}-${today.year}";
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(title: Text("Your Booking"), leading: BackButton()),
-        body: SafeArea(
-          child: Center(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Roadside Carpark",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ),
-                        Text(
-                          "267 Pasir Ris Dr, Singapore 678912",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 15),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Column(
-                          children: [
-                            Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Date of Booking",
-                                        style: TextStyle(fontSize: 15),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "15.02.2023",
-                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Time of Booking",
-                                        style: TextStyle(fontSize: 15),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "11:30",
-                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Duration booked",
-                                        style: TextStyle(fontSize: 15),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "2 hour",
-                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Price paid",
-                                        style: TextStyle(fontSize: 15),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "1.50/hr",
-                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        SizedBox(
-                          height: 50,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                GestureDetector(
-                  onTap: _showTimePicker,
-                  child: Container(
-                      padding: const EdgeInsets.all(20),
-                      margin: const EdgeInsets.symmetric(horizontal: 15),
-                      decoration: BoxDecoration(
-                        color: Colors.redAccent,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Center(child: Text(
-                        "Remove",
-                        style: TextStyle(color: Colors.white,
-                            fontSize: 20),))
-                  ),
-                ),
-              ],
-
+      appBar: AppBar(
+        title: const Text("Your Booking"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: bookings.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            const Text(
+              'Roadside Carpark',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-          ),
-        ));
+            const SizedBox(height: 8),
+            const Text(
+              '267 Pasir Ris Dr, Singapore 678912',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Lot Booked: ${bookings.first.lotId}',
+              style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Time of Booking: ${bookings.first.startTime}',
+              style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Duration booked: ${bookings.first.min} hour(s)',
+              style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Price paid:/hr',
+              style: const TextStyle(fontSize: 20),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

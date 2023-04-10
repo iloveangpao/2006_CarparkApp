@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class BookingPage extends StatefulWidget {
-  final String carparkNo;
-  const BookingPage({Key? key, required this.carparkNo}) : super(key: key);
+  final String cpCode;
+  const BookingPage({Key? key, required this.cpCode}) : super(key: key);
 
   @override
   State<BookingPage> createState() => _BookingPageState();
@@ -17,12 +17,12 @@ class BookingPage extends StatefulWidget {
 class _BookingPageState extends State<BookingPage> {
   String? selectedLotId;
   ParkingLot? parkingLot;
-  Future<ParkingLot> fetchParkingLot(String carparkNo) async {
+  Future<ParkingLot?> fetchParkingLot(String cpCode) async {
     final response = await http.get(Uri.parse('http://20.187.121.122/carpark/'));
     if (response.statusCode == 200) {
       final List<dynamic> parkingLotsJson = json.decode(response.body);
       final parkingLots = parkingLotsJson.map((json) => ParkingLot.fromJson(json)).toList();
-      final parkingLot = parkingLots.firstWhere((parkingLot) => parkingLot.cpCode == carparkNo);
+      final parkingLot = parkingLots?.firstWhere((parkingLot) => parkingLot.cpCode == cpCode);
       return parkingLot;
     } else {
       throw Exception('Failed to fetch parking lots');
@@ -30,14 +30,40 @@ class _BookingPageState extends State<BookingPage> {
   }
 
   //show time picker
-  DateTime? bookingTime; // declare a variable to store the selected time
+  DateTime? bookingStartTime; // add new variable for start time
+  DateTime? bookingEndTime; // declare a variable to store the selected time
 
 // show time picker and store the selected time
   void _showTimePicker() async {
     final selectedTime = await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (selectedTime != null) {
       setState(() {
-        bookingTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, selectedTime.hour, selectedTime.minute);
+        if (bookingStartTime == null || bookingEndTime == null) {
+          // set the start time if it has not been set
+          bookingStartTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, selectedTime.hour, selectedTime.minute);
+        } else {
+          // set the end time if the start time has been set
+          bookingEndTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, selectedTime.hour, selectedTime.minute);
+        }
+      });
+    }
+  }
+
+  void _showEndTimePicker() async {
+    final selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (selectedTime != null) {
+      setState(() {
+        // store the selected end time in bookingEndTime variable
+        bookingEndTime = DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+          selectedTime.hour,
+          selectedTime.minute,
+        );
       });
     }
   }
@@ -45,17 +71,19 @@ class _BookingPageState extends State<BookingPage> {
   void _submitBooking() async {
     final storage = FlutterSecureStorage();
     final token = await storage.read(key: "access_token");
-    print("token Read: $token");
-    print(bookingTime!.toIso8601String());
+    // print("token Read: $token");
+    // print(bookingStartTime!.toIso8601String());
+    // print(bookingEndTime!.toIso8601String()); // print the end time
 
-    if (bookingTime != null) {
+    if (selectedLotId != null && bookingStartTime != null && bookingEndTime != null) { // check if both start and end time are set
       final bookingBody = {
-        'start_time': bookingTime!.toIso8601String(), // use the selected time in the body
-        'lot_id' : selectedLotId,
+        'start_time': bookingStartTime!.toIso8601String(),
+        'end_time': bookingEndTime!.toIso8601String(), // include the end time in the booking body
+        'lot_id': selectedLotId,
       };
       final response = await http.post(Uri.parse('http://20.187.121.122/booking/'),
           headers: <String, String>{
-            'accept' : 'application/json',
+            'accept': 'application/json',
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json'
           },
@@ -68,16 +96,15 @@ class _BookingPageState extends State<BookingPage> {
         print(response.body);
       }
     } else {
-      // handle case where no time is selected
-      print('select time!');
+      // handle case where either start or end time is not selected
+      print('select start and end time!');
     }
-
   }
 
   @override
   void initState() {
     super.initState();
-    fetchParkingLot(widget.carparkNo)
+    fetchParkingLot(widget.cpCode)
         .then((parkingLot) => setState(() => this.parkingLot = parkingLot))
         .catchError((error) => print(error));
   }
@@ -107,7 +134,7 @@ class _BookingPageState extends State<BookingPage> {
                             selectedLotId = newValue!;
                           });
                         },
-                        items: parkingLot!.lots.map((lot) => DropdownMenuItem<String>(
+                        items: parkingLot!.lots.where((lot) => !lot['occupied']) .map((lot) => DropdownMenuItem<String>(
                           value: lot['id'].toString(),
                           child: Text(lot['id'].toString()),
                         )).toList(),
@@ -139,49 +166,27 @@ class _BookingPageState extends State<BookingPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10),
                         Text(
                           "Please Make your Booking For Today",
-                          style: TextStyle( fontSize: 15),
-                        ),
-                        Text(
-                          dateStr,
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 45),
-                        ),
-                        SizedBox(height:10,),
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Text(
-                            "This Booking System only allow you to book within 2 "
-                                " hour before you arrive at the destination ",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: _showTimePicker,
+                          child: Text("Select Start Time"),
                         ),
-                        GestureDetector(
-                          onTap: _showTimePicker,
-                          child: Container(
-                              padding: const EdgeInsets.all(20),
-                              margin: const EdgeInsets.symmetric(horizontal: 15),
-                              decoration: BoxDecoration(
-                                color: Color(0xff737373),
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Center(child: Text(
-                                "Pick Your Timing",
-                                style: TextStyle(color: Colors.white,
-                                    fontSize: 20),))
-                          ),
+                        SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: _showEndTimePicker, // new button to select end time
+                          child: Text("Select End Time"),
                         ),
-                        SizedBox(
-                          height: 50,
-                        )
                       ],
                     ),
+
                   ),
                 ),
                 SizedBox(height:50),
@@ -195,7 +200,7 @@ class _BookingPageState extends State<BookingPage> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Center(child: Text(
-                        "Confirm Your Booking: ${widget.carparkNo} ${parkingLot!.name}",
+                        "Confirm Your Booking",
                         style: TextStyle(color: Colors.white,
                             fontSize: 20),))
                   ),
