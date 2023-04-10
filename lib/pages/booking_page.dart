@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class BookingPage extends StatefulWidget {
-  final String carparkNo;
-  const BookingPage({Key? key, required this.carparkNo}) : super(key: key);
+  final String cpCode;
+  const BookingPage({Key? key, required this.cpCode}) : super(key: key);
 
   @override
   State<BookingPage> createState() => _BookingPageState();
@@ -17,12 +17,12 @@ class BookingPage extends StatefulWidget {
 class _BookingPageState extends State<BookingPage> {
   String? selectedLotId;
   ParkingLot? parkingLot;
-  Future<ParkingLot> fetchParkingLot(String carparkNo) async {
+  Future<ParkingLot?> fetchParkingLot(String cpCode) async {
     final response = await http.get(Uri.parse('http://20.187.121.122/carpark/'));
     if (response.statusCode == 200) {
       final List<dynamic> parkingLotsJson = json.decode(response.body);
       final parkingLots = parkingLotsJson.map((json) => ParkingLot.fromJson(json)).toList();
-      final parkingLot = parkingLots.firstWhere((parkingLot) => parkingLot.cpCode == carparkNo);
+      final parkingLot = parkingLots?.firstWhere((parkingLot) => parkingLot.cpCode == cpCode);
       return parkingLot;
     } else {
       throw Exception('Failed to fetch parking lots');
@@ -38,7 +38,7 @@ class _BookingPageState extends State<BookingPage> {
     final selectedTime = await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (selectedTime != null) {
       setState(() {
-        if (bookingStartTime == null) {
+        if (bookingStartTime == null || bookingEndTime == null) {
           // set the start time if it has not been set
           bookingStartTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, selectedTime.hour, selectedTime.minute);
         } else {
@@ -71,9 +71,9 @@ class _BookingPageState extends State<BookingPage> {
   void _submitBooking() async {
     final storage = FlutterSecureStorage();
     final token = await storage.read(key: "access_token");
-    print("token Read: $token");
-    print(bookingStartTime!.toIso8601String());
-    print(bookingEndTime!.toIso8601String()); // print the end time
+    // print("token Read: $token");
+    // print(bookingStartTime!.toIso8601String());
+    // print(bookingEndTime!.toIso8601String()); // print the end time
 
     if (bookingStartTime != null && bookingEndTime != null) { // check if both start and end time are set
       final bookingBody = {
@@ -104,7 +104,7 @@ class _BookingPageState extends State<BookingPage> {
   @override
   void initState() {
     super.initState();
-    fetchParkingLot(widget.carparkNo)
+    fetchParkingLot(widget.cpCode)
         .then((parkingLot) => setState(() => this.parkingLot = parkingLot))
         .catchError((error) => print(error));
   }
@@ -205,7 +205,7 @@ class _BookingPageState extends State<BookingPage> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Center(child: Text(
-                        "Confirm Your Booking: ${widget.carparkNo} ${parkingLot!.name}",
+                        "Confirm Your Booking: ${widget.cpCode} ${parkingLot!.name}",
                         style: TextStyle(color: Colors.white,
                             fontSize: 20),))
                   ),

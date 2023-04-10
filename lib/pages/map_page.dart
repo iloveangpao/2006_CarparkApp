@@ -34,7 +34,6 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  List<carpark> _carpark = <carpark>[];
 
   Future<List<carpark>> fetchcarpark() async {
     final response = await http.get(Uri.parse('http://20.187.121.122/avail/'));
@@ -77,14 +76,30 @@ class _MapScreenState extends State<MapScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BookingPage(carparkNo: carpark.carparkNo),
+              builder: (context) {
+                // Show a loading screen while the BookingPage is loading
+                return FutureBuilder(
+                  future: Future.delayed(Duration(seconds: 1)), // Replace this with your BookingPage loading logic
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Scaffold(
+                        body: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    } else {
+                      return BookingPage(cpCode: carpark.carparkNo);
+                    }
+                  },
+                );
+              },
             ),
           );
         },
-
       );
     }).toSet();
   }
+
 
 
 
