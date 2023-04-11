@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:intl/intl.dart';
 import '../classes/Parking.dart';
 import '../classes/curbooking.dart';
 
@@ -67,9 +67,10 @@ class _currentBookingPage extends State<currentBookingPage> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      backgroundColor: Color(0xFFD6F1FF),
       body: bookings.isEmpty
           ? const Center(child: CircularProgressIndicator())
-          :/* Container(
+          : /* Container(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,135 +100,129 @@ class _currentBookingPage extends State<currentBookingPage> {
           ],
         ),
       ),*/
-      Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "${bookings.first.name}",
-                style: TextStyle(fontSize: 15),
+          Column(children: [
+              SizedBox(
+                height: 20,
               ),
-            ),
-            Text(
-              "${bookings.first.cpCode}",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 15),
-            ),
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Booked Lot",
-                            style: TextStyle(fontSize: 15),
-                          ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 400,
+                    height: 400,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "${bookings.first.lotId}",
-                            style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-                          ),
-                        )
                       ],
                     ),
-                    Column(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(4.0),
                           child: Text(
-                            "Time of Booking",
-                            style: TextStyle(fontSize: 15),
+                            "${bookings.first.name}",
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "${bookings.first.startTime}",
-                            style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Duration booked",
-                            style: TextStyle(fontSize: 15),
-                          ),
+                        Text(
+                          "Carpark Code: ${bookings.first.cpCode}",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 25),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "2 hour",
-                            style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-
-                          ),
-                        )
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Price paid",
-                            style: TextStyle(fontSize: 15),
-                          ),
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Booked Lot ID",
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "${bookings.first.lotId}",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Time of Booking",
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "${DateFormat('dd-MM-yyyy HH:mm').format(bookings.first.startTime)}",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 25),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Price paid",
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "\$${bookings.first.rate} per ${bookings.first.min}",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "1.50/hr",
-                            style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-                          ),
-                        )
                       ],
                     ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-
-            SizedBox(
-              height: 50,
-            )
-          ],
-        ),
-      ),
+                  ),
+                ],
+              ),
+            ]),
     );
   }
 }
