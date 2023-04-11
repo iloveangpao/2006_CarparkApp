@@ -101,7 +101,7 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
               Navigator.of(context).pop(true);
             });
             return AlertDialog(
-              title: Text('Favourited successfully'),
+              title: Text('Added to Favourites'),
             );
           });
     } else if (response.statusCode == 422) {
