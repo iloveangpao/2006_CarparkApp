@@ -22,7 +22,7 @@ class _currentBookingPage extends State<currentBookingPage> {
     showTimePicker(context: context, initialTime: TimeOfDay.now());
   }
 
-  void _submitBooking() async {
+  void _getBooking() async {
     final storage = FlutterSecureStorage();
     final token = await storage.read(key: "access_token");
     print("token Read: $token");
@@ -54,9 +54,34 @@ class _currentBookingPage extends State<currentBookingPage> {
     }
   }
 
+  void _removeBooking() async {
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: "access_token");
+    // print("token Read: $token");
+    // print(bookingStartTime!.toIso8601String());
+    // print(bookingEndTime!.toIso8601String()); // print the end time
+    print(bookings.first.id);
+    // check if both start and end time are set
+    final response = await http.delete(Uri.parse('http://20.187.121.122/booking/${bookings.first.id}'),
+        headers: <String, String>{
+          'accept': 'application/json',
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json'
+        },
+      );
+    if (response.statusCode == 200) {
+      // handle success
+      print("success!");
+    } else {
+      // handle error
+      print(response.body);
+    }
+
+  }
+
   @override
   void initState() {
-    _submitBooking();
+    _getBooking();
     super.initState();
   }
 
@@ -96,6 +121,11 @@ class _currentBookingPage extends State<currentBookingPage> {
             Text(
               'Time of Booking: ${bookings.first.startTime}',
               style: const TextStyle(fontSize: 30),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _removeBooking,
+              child: Text("Remove Booking"),
             ),
           ],
         ),
