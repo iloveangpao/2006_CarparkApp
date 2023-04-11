@@ -118,6 +118,31 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
+  void _removeFav(int id) async {
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: "access_token");
+    print(id);
+    // print("token Read: $token");
+    // print(bookingStartTime!.toIso8601String());
+    // print(bookingEndTime!.toIso8601String()); // print the end time
+    // check if both start and end time are set
+    final response = await http.delete(Uri.parse('http://20.187.121.122/favourite/$id'),
+      headers: <String, String>{
+        'accept': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+    );
+    if (response.statusCode == 200) {
+      // handle success
+      print("success!");
+    } else {
+      // handle error
+      print(response.body);
+    }
+
+  }
+
   Set<Marker> _createMarkers() {
     return _carparks.map((carpark) {
       bool isFavouritecheck = favData
@@ -169,7 +194,9 @@ class _MapScreenState extends State<MapScreen> {
                           isFavourite ? 'Unfavourite' : 'Add to Favourites'),
                       onPressed: () {
                         if (isFavourite) {
-                          print('lol');
+                          _removeFav(favData[0]['id']);
+                          print(favData[0]['id']);
+
                         } else {
                           createFav(carpark.carparkNo);
                         }
