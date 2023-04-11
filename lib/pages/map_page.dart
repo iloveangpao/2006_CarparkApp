@@ -100,7 +100,7 @@ class _MapScreenState extends State<MapScreen> {
               Navigator.of(context).pop(true);
             });
             return AlertDialog(
-              title: Text('Favourited successfully'),
+              title: Text('Added to Favourites'),
             );
           });
     } else if (response.statusCode == 422) {
@@ -165,8 +165,8 @@ class _MapScreenState extends State<MapScreen> {
                   content: Text('${carpark.lotsAvailable} lots available '),
                   actions: <Widget>[
                     TextButton(
-                      child:
-                          Text(isFavourite ? 'Unfavorite' : 'Add to Favorites'),
+                      child: Text(
+                          isFavourite ? 'Unfavourite' : 'Add to Favourites'),
                       onPressed: () {
                         if (isFavourite) {
                           print('lol');

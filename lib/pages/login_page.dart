@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import './home_page.dart';
 import './map_page.dart';
@@ -8,6 +7,7 @@ import 'register_page.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 class User {
   final int id;
   final String email;
@@ -23,19 +23,13 @@ class LoginPage extends StatelessWidget {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-
- void login(BuildContext context, String email, String password) async{
+  void login(BuildContext context, String email, String password) async {
     final url = Uri.parse('http://20.187.121.122/token');
-    final response = await http.post(
-        url,
-        body:{
-          'username' : email,
-          'password' : password
-        }
-    );
+    final response =
+        await http.post(url, body: {'username': email, 'password': password});
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body.toString());
-     print("Data: $data");
+      print("Data: $data");
       await storage.write(key: "access_token", value: data['access_token']);
       getUserDetails(context);
       Navigator.push(
@@ -62,6 +56,7 @@ class LoginPage extends StatelessWidget {
       );
     }
   }
+
   void getUserDetails(BuildContext context) async {
     final token = await storage.read(key: "access_token");
     print("token Read: $token");
@@ -69,10 +64,9 @@ class LoginPage extends StatelessWidget {
     final response = await http.get(
       url,
       headers: {
-        'accept' : 'application/json',
+        'accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
-
     );
     final newresponse = response.body;
     print(newresponse);
@@ -82,39 +76,39 @@ class LoginPage extends StatelessWidget {
       final email = data['email'];
       final username = data['username'];
 
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("User Details"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("ID: $id"),
-                SizedBox(height: 8),
-                Text("Email: $email"),
-                SizedBox(height: 8),
-                Text("Username: $username"),
-              ],
-            ),
-            actions: [
-              TextButton(
-                child: Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(email: email),
-                    ),
-                  );
-                },
-              )
-            ],
-          );
-        },
-      );
+      // showDialog(
+      //   context: context,
+      //   builder: (BuildContext context) {
+      //     return AlertDialog(
+      //       title: Text("User Details"),
+      //       content: Column(
+      //         mainAxisSize: MainAxisSize.min,
+      //         crossAxisAlignment: CrossAxisAlignment.start,
+      //         children: [
+      //           Text("ID: $id"),
+      //           SizedBox(height: 8),
+      //           Text("Email: $email"),
+      //           SizedBox(height: 8),
+      //           Text("Username: $username"),
+      //         ],
+      //       ),
+      //       actions: [
+      //         TextButton(
+      //           child: Text("OK"),
+      //           onPressed: () {
+      //             Navigator.of(context).pop();
+      //             Navigator.push(
+      //               context,
+      //               MaterialPageRoute(
+      //                 builder: (context) => HomePage(email: email),
+      //               ),
+      //             );
+      //           },
+      //         )
+      //       ],
+      //     );
+      //   },
+      // );
     } else {
       showDialog(
         context: context,
@@ -133,7 +127,6 @@ class LoginPage extends StatelessWidget {
       );
     }
   }
-
 
 /*
   void signUserIn(BuildContext context) async {
@@ -185,7 +178,10 @@ class LoginPage extends StatelessWidget {
                   //Welcome back
                   Text(
                     "Welcome back you\'ve been missed!",
-                    style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold ),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 25),
                   //username textfield
@@ -219,14 +215,15 @@ class LoginPage extends StatelessWidget {
                   //sign in button
                   GestureDetector(
                     onTap: () {
-                     login(context,usernameController.text, passwordController.text);
+                      login(context, usernameController.text,
+                          passwordController.text);
                       //signUserIn(context);
                     },
                     child: Container(
                         padding: const EdgeInsets.all(20),
                         margin: const EdgeInsets.symmetric(horizontal: 15),
                         decoration: BoxDecoration(
-                          color: Color(0xff737373),
+                          color: Color(0xff3F61B8),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Center(
@@ -240,27 +237,27 @@ class LoginPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   GestureDetector(
-                      onTap: () {
-                        int index;
-                        String name;
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => RegisterPage()));
-                      },
+                    onTap: () {
+                      int index;
+                      String name;
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RegisterPage()));
+                    },
                     child: Container(
                         padding: const EdgeInsets.all(20),
                         margin: const EdgeInsets.symmetric(horizontal: 15),
                         decoration: BoxDecoration(
-                          color: Color(0xff737373),
+                          color: Color(0xff3F61B8),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Center(
                             child: Text(
-                              "Register",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16),
-                            ))),
+                          "Register",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ))),
                   ),
                   //or continue with
                 ],

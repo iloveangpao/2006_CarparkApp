@@ -99,7 +99,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     const SizedBox(height: 25),
                     Text(
                       "Create your account in less then a minute !",
-                      style: TextStyle(color: Colors.black, fontSize: 16,fontWeight: FontWeight.bold ),
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 25),
                     //username textfield
@@ -182,7 +185,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           padding: const EdgeInsets.all(20),
                           margin: const EdgeInsets.symmetric(horizontal: 15),
                           decoration: BoxDecoration(
-                            color: Color(0xff737373),
+                            color: Color(0xff3F61B8),
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Center(
@@ -196,27 +199,27 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 20),
                     GestureDetector(
-                        onTap: () {
-                          int index;
-                          String name;
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => LoginPage()));
-                        },
+                      onTap: () {
+                        int index;
+                        String name;
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => LoginPage()));
+                      },
                       child: Container(
                           padding: const EdgeInsets.all(20),
                           margin: const EdgeInsets.symmetric(horizontal: 15),
                           decoration: BoxDecoration(
-                            color: Color(0xff737373),
+                            color: Color(0xff3F61B8),
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Center(
                               child: Text(
-                                "Back",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16),
-                              ))),
+                            "Back",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ))),
                     ),
 
                     //or continue with

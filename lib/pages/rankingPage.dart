@@ -18,23 +18,45 @@ class _RankingPageState extends State<RankingPage> {
       ),
       body: Center(
         child: Column(children: [
+          SizedBox(height: 20),
           Text(
             "Filter By:",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
+          SizedBox(height: 10),
           ElevatedButton(
-              onPressed: () {
-                widget.rankFunction("Availability");
-                Navigator.pop(context);
-              },
-              child: Text("Availability")),
+            style: ElevatedButton.styleFrom(
+              elevation: 3,
+              minimumSize: Size(100, 40),
+            ),
+            onPressed: () {
+              widget.rankFunction("Availability");
+              Navigator.pop(context);
+            },
+            child: Text(
+              "Availability",
+              style: TextStyle(
+                fontSize: 15,
+              ),
+            ),
+          ),
+          SizedBox(height: 5),
           ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 3,
+                minimumSize: Size(100, 40),
+              ),
               onPressed: () {
                 //To change later for price
                 widget.rankFunction("rate");
                 Navigator.pop(context);
               },
-              child: Text("Price")),
+              child: Text(
+                "Price",
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              )),
         ]),
       ),
     );
