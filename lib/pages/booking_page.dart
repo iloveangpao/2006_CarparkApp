@@ -6,6 +6,9 @@ import '../classes/Parking.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'home_page.dart';
+import 'map_page.dart';
+
 class BookingPage extends StatefulWidget {
   final String cpCode;
   const BookingPage({Key? key, required this.cpCode}) : super(key: key);
@@ -74,6 +77,50 @@ class _BookingPageState extends State<BookingPage> {
     }
   }
 
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Success'),
+          content: const Text('Booking successful!'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacement( // Navigate to another page
+                  MaterialPageRoute(builder: (context) => HomePage(email: '',)),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showFailureDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Fail'),
+          content: const Text('Please enter all the required details!'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
   void _submitBooking() async {
     final storage = FlutterSecureStorage();
     final token = await storage.read(key: "access_token");
@@ -102,6 +149,7 @@ class _BookingPageState extends State<BookingPage> {
       if (response.statusCode == 200) {
         // handle success
         print("success!");
+        _showSuccessDialog();
       } else {
         // handle error
         print(response.body);
@@ -109,6 +157,7 @@ class _BookingPageState extends State<BookingPage> {
     } else {
       // handle case where either start or end time is not selected
       print('select start and end time!');
+      _showFailureDialog();
     }
   }
 

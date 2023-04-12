@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:carparkapp/pages/map_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../classes/Parking.dart';
 import '../classes/curbooking.dart';
+import 'home_page.dart';
 
 class currentBookingPage extends StatefulWidget {
   const currentBookingPage({Key? key}) : super(key: key);
@@ -45,10 +47,34 @@ class _currentBookingPage extends State<currentBookingPage> {
       print("success!");
       print('Lot ID: ${bookings.first.lotId}');
       setState(() {});
+      _isDataLoaded = true;
     } else {
       // handle error
       print(response.body);
     }
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Success'),
+          content: const Text('Removal successful!'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacement( // Navigate to another page
+                  MaterialPageRoute(builder: (context) => HomePage(email: '',)),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _removeBooking() async {
@@ -69,6 +95,7 @@ class _currentBookingPage extends State<currentBookingPage> {
     if (response.statusCode == 200) {
       // handle success
       print("success!");
+      _showSuccessDialog();
     } else {
       // handle error
       print(response.body);
@@ -76,6 +103,7 @@ class _currentBookingPage extends State<currentBookingPage> {
 
   }
 
+  bool _isDataLoaded = false;
   @override
   void initState() {
     _getBooking();
@@ -93,8 +121,13 @@ class _currentBookingPage extends State<currentBookingPage> {
         ),
       ),
       backgroundColor: Color(0xFFD6F1FF),
-      body: bookings.isEmpty
-          ? const Center(child: CircularProgressIndicator())
+      body: bookings.isEmpty && _isDataLoaded == false
+          ? AlertDialog(
+        title: Text("No Current Booking"),
+        content: Text("There is no current booking."),
+        actions: [
+        ],
+      )/*const Center(child: CircularProgressIndicator())*/
           : /* Container(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
         child: Column(
@@ -240,7 +273,14 @@ class _currentBookingPage extends State<currentBookingPage> {
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                    )
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: _removeBooking,
+                                      child: Text("Remove Booking"),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.red, // Set the button color to red
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ],
@@ -250,8 +290,10 @@ class _currentBookingPage extends State<currentBookingPage> {
                       ],
                     ),
                   ),
+
                 ],
               ),
+
             ]),
     );
   }
