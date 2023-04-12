@@ -133,7 +133,7 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Carparks within 500m of your searched area:",
+            Text("Carparks within 1km of your searched area",
                 style: TextStyle(fontSize: 16)),
             IconButton(
               onPressed: () {
@@ -163,7 +163,7 @@ class _SearchPageCarparksState extends State<SearchPageCarparks> {
                         title: Text("$data_name ($data_cpCode)"),
                         subtitle: Text("Rate: \$" +
                             data['rate'].toString() +
-                            "/hr\n" +
+                            "/ ${data['min']}\n" +
                             "Availability: $data_avail lots"),
                         trailing: ElevatedButton(
                           child: Row(
