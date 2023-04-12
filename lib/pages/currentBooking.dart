@@ -66,8 +66,12 @@ class _currentBookingPage extends State<currentBookingPage> {
               child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pushReplacement( // Navigate to another page
-                  MaterialPageRoute(builder: (context) => HomePage(email: '',)),
+                Navigator.of(context).pushReplacement(
+                  // Navigate to another page
+                  MaterialPageRoute(
+                      builder: (context) => HomePage(
+                            email: '',
+                          )),
                 );
               },
             ),
@@ -85,13 +89,14 @@ class _currentBookingPage extends State<currentBookingPage> {
     // print(bookingEndTime!.toIso8601String()); // print the end time
     print(bookings.first.id);
     // check if both start and end time are set
-    final response = await http.delete(Uri.parse('http://20.187.121.122/booking/${bookings.first.id}'),
-        headers: <String, String>{
-          'accept': 'application/json',
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json'
-        },
-      );
+    final response = await http.delete(
+      Uri.parse('http://20.187.121.122/booking/${bookings.first.id}'),
+      headers: <String, String>{
+        'accept': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+    );
     if (response.statusCode == 200) {
       // handle success
       print("success!");
@@ -100,7 +105,6 @@ class _currentBookingPage extends State<currentBookingPage> {
       // handle error
       print(response.body);
     }
-
   }
 
   bool _isDataLoaded = false;
@@ -123,11 +127,10 @@ class _currentBookingPage extends State<currentBookingPage> {
       backgroundColor: Color(0xFFD6F1FF),
       body: bookings.isEmpty && _isDataLoaded == false
           ? AlertDialog(
-        title: Text("No Current Booking"),
-        content: Text("There is no current booking."),
-        actions: [
-        ],
-      )/*const Center(child: CircularProgressIndicator())*/
+              title: Text("No Current Booking"),
+              content: Text("There is no current booking."),
+              actions: [],
+            ) /*const Center(child: CircularProgressIndicator())*/
           : /* Container(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
         child: Column(
@@ -196,6 +199,7 @@ class _currentBookingPage extends State<currentBookingPage> {
                           padding: const EdgeInsets.all(4.0),
                           child: Text(
                             "${bookings.first.name}",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 30, fontWeight: FontWeight.bold),
                           ),
@@ -278,7 +282,8 @@ class _currentBookingPage extends State<currentBookingPage> {
                                       onPressed: _removeBooking,
                                       child: Text("Remove Booking"),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.red, // Set the button color to red
+                                        primary: Colors
+                                            .red, // Set the button color to red
                                       ),
                                     ),
                                   ],
@@ -290,10 +295,8 @@ class _currentBookingPage extends State<currentBookingPage> {
                       ],
                     ),
                   ),
-
                 ],
               ),
-
             ]),
     );
   }

@@ -89,8 +89,12 @@ class _BookingPageState extends State<BookingPage> {
               child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pushReplacement( // Navigate to another page
-                  MaterialPageRoute(builder: (context) => HomePage(email: '',)),
+                Navigator.of(context).pushReplacement(
+                  // Navigate to another page
+                  MaterialPageRoute(
+                      builder: (context) => HomePage(
+                            email: '',
+                          )),
                 );
               },
             ),
@@ -119,7 +123,6 @@ class _BookingPageState extends State<BookingPage> {
       },
     );
   }
-
 
   void _submitBooking() async {
     final storage = FlutterSecureStorage();
@@ -150,9 +153,7 @@ class _BookingPageState extends State<BookingPage> {
             );
           },
         );
-      }
-
-      else if (bookingEndTime!.difference(bookingStartTime!).inHours > 2) {
+      } else if (bookingEndTime!.difference(bookingStartTime!).inHours > 2) {
         // Show an alert if the duration between start and end time is more than 2 hours
         showDialog(
           context: context,
@@ -171,8 +172,7 @@ class _BookingPageState extends State<BookingPage> {
             );
           },
         );
-      }
-      else {
+      } else {
         // check if both start and end time are set
         final bookingBody = {
           'start_time': bookingStartTime!.toIso8601String(),
@@ -181,13 +181,13 @@ class _BookingPageState extends State<BookingPage> {
           'lot_id': selectedLotId,
         };
         final response =
-        await http.post(Uri.parse('http://20.187.121.122/booking/'),
-            headers: <String, String>{
-              'accept': 'application/json',
-              'Authorization': 'Bearer $token',
-              'Content-Type': 'application/json'
-            },
-            body: jsonEncode(bookingBody));
+            await http.post(Uri.parse('http://20.187.121.122/booking/'),
+                headers: <String, String>{
+                  'accept': 'application/json',
+                  'Authorization': 'Bearer $token',
+                  'Content-Type': 'application/json'
+                },
+                body: jsonEncode(bookingBody));
         if (response.statusCode == 200) {
           // handle success
           print("success!");
@@ -197,8 +197,7 @@ class _BookingPageState extends State<BookingPage> {
           print(response.body);
         }
       }
-    }
-else {
+    } else {
       // handle case where either start or end time is not selected
       print('select start and end time!');
       _showFailureDialog();
@@ -340,7 +339,7 @@ else {
                         ),
                         Text(
                           bookingEndTime != null
-                              ? ("Start Date & Time Selected: ${DateFormat('dd-MM-yyyy HH:mm').format(bookingEndTime as DateTime)}")
+                              ? ("End Date & Time Selected: ${DateFormat('dd-MM-yyyy HH:mm').format(bookingEndTime as DateTime)}")
                               : 'No end time selected',
                           style: TextStyle(fontSize: 20),
                         ),
