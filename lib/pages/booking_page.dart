@@ -131,30 +131,53 @@ class _BookingPageState extends State<BookingPage> {
     if (selectedLotId != null &&
         bookingStartTime != null &&
         bookingEndTime != null) {
-      // check if both start and end time are set
-      final bookingBody = {
-        'start_time': bookingStartTime!.toIso8601String(),
-        'end_time': bookingEndTime!
-            .toIso8601String(), // include the end time in the booking body
-        'lot_id': selectedLotId,
-      };
-      final response =
-          await http.post(Uri.parse('http://20.187.121.122/booking/'),
-              headers: <String, String>{
-                'accept': 'application/json',
-                'Authorization': 'Bearer $token',
-                'Content-Type': 'application/json'
-              },
-              body: jsonEncode(bookingBody));
-      if (response.statusCode == 200) {
-        // handle success
-        print("success!");
-        _showSuccessDialog();
-      } else {
-        // handle error
-        print(response.body);
+      if (bookingEndTime!.isBefore(bookingStartTime!)) {
+        // Show an alert if end time is earlier than start time
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text('End time cannot be earlier than start time.'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
       }
-    } else {
+      else {
+        // check if both start and end time are set
+        final bookingBody = {
+          'start_time': bookingStartTime!.toIso8601String(),
+          'end_time': bookingEndTime!
+              .toIso8601String(), // include the end time in the booking body
+          'lot_id': selectedLotId,
+        };
+        final response =
+        await http.post(Uri.parse('http://20.187.121.122/booking/'),
+            headers: <String, String>{
+              'accept': 'application/json',
+              'Authorization': 'Bearer $token',
+              'Content-Type': 'application/json'
+            },
+            body: jsonEncode(bookingBody));
+        if (response.statusCode == 200) {
+          // handle success
+          print("success!");
+          _showSuccessDialog();
+        } else {
+          // handle error
+          print(response.body);
+        }
+      }
+    }
+else {
       // handle case where either start or end time is not selected
       print('select start and end time!');
       _showFailureDialog();
