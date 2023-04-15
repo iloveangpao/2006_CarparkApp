@@ -153,26 +153,7 @@ class _BookingPageState extends State<BookingPage> {
             );
           },
         );
-      } else if (bookingEndTime!.difference(bookingStartTime!).inHours > 2) {
-        // Show an alert if the duration between start and end time is more than 2 hours
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Error'),
-              content: Text('End time must be within 2 hours of start time.'),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      } else {
+      }  else {
         // check if both start and end time are set
         final bookingBody = {
           'start_time': bookingStartTime!.toIso8601String(),
